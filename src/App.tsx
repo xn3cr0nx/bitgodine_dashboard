@@ -1,137 +1,64 @@
-import Network, { Graph, Node, Edge } from "components/Graph";
-import SearchBar from "components/SearchBar";
+import SearchSection from "components/SearchSection";
 import { main } from "constants/colors";
-import React, { useState, useEffect, useMemo } from "react";
-import { Col, Container, Row, Spinner, UncontrolledAlert } from "reactstrap";
-import useFetch from "use-http";
 import { endpoint } from "constants/config";
+import { Store } from "context";
+import React, { useContext, useEffect, useState } from "react";
+import { useMutation } from "react-query";
+import { Spinner, UncontrolledAlert } from "reactstrap";
 
-interface Trace {
-  txid: string;
-  receiver: string;
-  vout: number;
-  amount: number;
-  next: string;
-}
+const fetchSearch = async (url: string): Promise<Response> => {
+  return await fetch(url);
+};
 
 const App: React.FC = () => {
   const [address, setAddress] = useState("");
-  const [error, setError] = useState("");
+  const [alert, setAlert] = useState("");
   const [url, setUrl] = useState(endpoint);
-  const [responseData, setResponseData] = useState<any>({});
-  const [request, response] = useFetch(url);
+  const { state, dispatch } = useContext(Store);
+  const [mutate, { status, data, error }] = useMutation(fetchSearch);
 
   const handleKeyPress = async (event: React.KeyboardEvent<Element>): Promise<void> => {
     if (event.key === "Enter" && address) {
-      const resp = await request.get();
-      if (resp) {
-        setResponseData(resp);
-      } else {
-        console.log("request", request);
-        console.log("response", response);
-        setError(request?.error?.message);
+      try {
+        await mutate(url);
+      } catch (error) {
+        console.log("ERROR", error);
       }
     }
   };
+
+  useEffect(() => {
+    (async (): Promise<void> => {
+      if (data && status == "success") {
+        const payload = await data.json();
+        dispatch({
+          type: "PAYLOAD",
+          payload,
+        });
+      }
+    })();
+  }, [data]);
+
+  useEffect(() => {
+    console.log("SOMETHING CHANGED", data, status, error);
+  }, [data, status, error]);
 
   useEffect(() => {
     setUrl(endpoint.concat("trace/address/" + address));
   }, [address]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setError("");
-    }, 10000);
+    if (error) {
+      setAlert((error as any).message);
+      setTimeout(() => {
+        setAlert("");
+      }, 3000);
+    }
   }, [error]);
 
-  const data = useMemo((): Graph => {
-    const graph: Graph = { nodes: [], edges: [] };
-    if (responseData && (responseData?.traces ?? false)) {
-      const traces: Trace[] = [];
-      for (const t of Object.keys(responseData.traces)) {
-        let found = false;
-        for (const c of Object.keys(responseData.traces)) {
-          if (responseData.traces[c].next == t) {
-            found = true;
-          }
-        }
-        if (!found) {
-          traces.push(responseData.traces[t]);
-        }
-      }
-
-      if (traces.length > 1) {
-        for (let t of traces) {
-          const flows: Trace[] = [t];
-          while (true) {
-            if (responseData.traces[t.next]) {
-              flows.push(responseData.traces[t.next]);
-              t = responseData.traces[t.next];
-            } else {
-              break;
-            }
-          }
-
-          flows.forEach((f: Trace, i: number) => {
-            const node: Node = {
-              id: i,
-              label: f.txid,
-              title: JSON.stringify(f),
-            };
-            graph.nodes.push(node);
-            if (i > 0) {
-              const edge: Edge = {
-                from: i - 1,
-                to: i,
-              };
-              graph.edges.push(edge);
-            }
-          });
-        }
-        return graph;
-      } else {
-        if (!traces.length) {
-          setError("Empty Flow");
-          return graph;
-        }
-        let t = traces[0];
-        while (true) {
-          if (responseData.traces[t.next]) {
-            if (t.next == "?") {
-              console.log("WTF MAN", t, t.txid, t.receiver);
-            }
-            traces.push(responseData.traces[t.next]);
-            t = responseData.traces[t.next];
-          } else {
-            break;
-          }
-        }
-
-        traces.forEach((f: Trace, i: number) => {
-          const node: Node = {
-            id: i,
-            label: f.txid,
-            title: JSON.stringify(f),
-          };
-          graph.nodes.push(node);
-          if (i > 0) {
-            const edge: Edge = {
-              from: i - 1,
-              to: i,
-            };
-            graph.edges.push(edge);
-          }
-        });
-
-        return graph;
-      }
-    }
-    return graph;
-  }, [responseData]);
-
   return (
-    <div className="p-2 align-items-center" style={{ background: main, padding: "2%" }}>
-      {error && (
+    <div className="p-2 align-items-center" style={{ background: main, padding: "2%", minHeight: "100vh" }}>
+      {alert && (
         <UncontrolledAlert
           color="danger"
           className="align-items-center"
@@ -145,39 +72,18 @@ const App: React.FC = () => {
             marginLeft: "auto",
             marginRight: "auto",
           }}>
-          {error}
+          {alert}
         </UncontrolledAlert>
       )}
 
-      <Container onKeyPress={handleKeyPress}>
-        <Row className="p-8 align-items-center">
-          <Col sm="4">
-            <img
-              alt="logo"
-              className="img-fluid rounded-circle shadow-lg"
-              src={require("assets/img/brand/bitgodine_finder.png")}
-              style={{ width: "6rem" }}
-            />
-          </Col>
-          <Col sm="6">
-            <h3 className="mb-0 font-weight-bold text-uppercase text-muted text-primary">Bitgodine Explorer</h3>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <SearchBar placeholder="Address" set={setAddress} />
-          </Col>
-        </Row>
-      </Container>
-      {request.loading ? (
+      <SearchSection action={handleKeyPress} placeholder="Block height, hash, transaction, address" set={setAddress} />
+      {status == "loading" ? (
         <Spinner
           style={{ width: "4rem", height: "4rem", left: "45%" }}
           className="noUi-value"
           type="grow"
           color="info"
         />
-      ) : data?.nodes?.length ?? false ? (
-        <Network nodes={data.nodes} edges={data.edges} />
       ) : (
         false
       )}

@@ -28,6 +28,11 @@ const Inputs: React.FC<SearchProps> = ({ placeholder, set }) => {
           onBlur={(): void => setSearch(false)}
           onChange={(e): void => set(e.target.value)}
         />
+        <InputGroupAddon addonType="append">
+          <InputGroupText>
+            <i className="fa fa-search" />
+          </InputGroupText>
+        </InputGroupAddon>
       </InputGroup>
     </FormGroup>
   );
