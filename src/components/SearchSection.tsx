@@ -29,6 +29,14 @@ const SearchSection: React.FC<SearchProps> = ({ action, placeholder, set }) => {
           <SearchBar placeholder={placeholder} set={set} />
         </Col>
       </Row>
+      <div
+        className="w-100 shadow-lg mt-3 position-absolute"
+        style={{
+          height: "1px",
+          left: 0,
+          backgroundColor: "#adb5bd",
+        }}
+      />
     </Container>
   );
 };
