@@ -29,6 +29,12 @@ function reducer(state: State = initialState, { type, payload }: ReducerAction):
       return {
         ...state,
       };
+    case "BLOCK":
+      console.log("GOT BLOCK", payload);
+      return {
+        ...state,
+        block: payload,
+      };
     case "TRACE":
       console.log("GOT PAYLOAD", payload);
       return {

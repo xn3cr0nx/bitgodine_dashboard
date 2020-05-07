@@ -1,11 +1,12 @@
 import Network, { Edge, Graph, Node } from "components/Graph";
 import SearchSection from "components/SearchSection";
+import Alert from "components/styled/Alert";
 import { main } from "constants/colors";
 import { endpoint } from "constants/config";
 import { Store } from "context";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Spinner, UncontrolledAlert } from "reactstrap";
+import { Spinner } from "reactstrap";
 
 interface Trace {
   txid: string;
@@ -147,23 +148,7 @@ const App: React.FC = () => {
 
   return (
     <div className="p-2 align-items-center" style={{ background: main, padding: "2%", minHeight: "100vh" }}>
-      {alert && (
-        <UncontrolledAlert
-          color="danger"
-          className="align-items-center"
-          style={{
-            position: "absolute",
-            width: "90%",
-            bottom: 0,
-            zIndex: 1200,
-            left: 0,
-            right: 0,
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}>
-          {alert}
-        </UncontrolledAlert>
-      )}
+      <Alert visible={!!alert} message={alert} />
 
       <SearchSection action={handleKeyPress} placeholder="Address" set={setAddress} />
       {status == "loading" ? (
