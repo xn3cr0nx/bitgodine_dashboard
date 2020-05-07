@@ -2,6 +2,7 @@
 import React from "react";
 import { Button, Col, Container, Nav, NavItem, NavLink, Row, UncontrolledTooltip } from "reactstrap";
 
+// style={{ position: "fixed", left: 0, bottom: 0, width: "100%", textAlign: "center" }}>
 const CardsFooter: React.FC = () => {
   return (
     <footer className="footer has-cards">

@@ -71,49 +71,40 @@ const Header: React.FC = () => {
               <UncontrolledDropdown nav>
                 <DropdownToggle nav>
                   <i className="ni ni-ui-04 d-lg-none mr-1" />
-                  <span className="nav-link-inner--text">Components</span>
+                  <span className="nav-link-inner--text">Services</span>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-xl">
                   <div className="dropdown-menu-inner">
-                    <Media
-                      className="d-flex align-items-center"
-                      href="https://demos.creative-tim.com/argon-design-system-react/#/documentation/overview?ref=adsr-navbar"
-                      target="_blank">
+                    <Media className="d-flex align-items-center" href="/tracing">
                       <div className="icon icon-shape bg-gradient-primary rounded-circle text-white">
-                        <i className="ni ni-spaceship" />
+                        <i className="ni ni-vector" />
                       </div>
                       <Media body className="ml-3">
-                        <h6 className="heading text-primary mb-md-1">Getting started</h6>
+                        <h6 className="heading text-primary mb-md-1">Tracing</h6>
                         <p className="description d-none d-md-inline-block mb-0">
-                          Learn how to use Argon compiling Scss, change brand colors and more.
+                          Bitcoin flow tracing visualization tool
                         </p>
                       </Media>
                     </Media>
-                    <Media
-                      className="d-flex align-items-center"
-                      href="https://demos.creative-tim.com/argon-design-system-react/#/documentation/colors?ref=adsr-navbar"
-                      target="_blank">
+                    <Media className="d-flex align-items-center" href="/clusters">
                       <div className="icon icon-shape bg-gradient-success rounded-circle text-white">
-                        <i className="ni ni-palette" />
+                        <i className="ni ni-planet" />
                       </div>
                       <Media body className="ml-3">
-                        <h6 className="heading text-primary mb-md-1">Foundation</h6>
+                        <h6 className="heading text-primary mb-md-1">Clustering</h6>
                         <p className="description d-none d-md-inline-block mb-0">
-                          Learn more about colors, typography, icons and the grid system we used for Argon.
+                          Bitcoin addresses clustering visualization tool
                         </p>
                       </Media>
                     </Media>
-                    <Media
-                      className="d-flex align-items-center"
-                      href="https://demos.creative-tim.com/argon-design-system-react/#/documentation/alert?ref=adsr-navbar"
-                      target="_blank">
+                    <Media className="d-flex align-items-center" href="/test">
                       <div className="icon icon-shape bg-gradient-warning rounded-circle text-white">
-                        <i className="ni ni-ui-04" />
+                        <i className="ni ni-tag" />
                       </div>
                       <Media body className="ml-3">
-                        <h5 className="heading text-warning mb-md-1">Components</h5>
+                        <h5 className="heading text-warning mb-md-1">Abuses</h5>
                         <p className="description d-none d-md-inline-block mb-0">
-                          Browse our 50 beautiful handcrafted components offered in the Free version.
+                          Search for tagged addresses and reported abuses
                         </p>
                       </Media>
                     </Media>
