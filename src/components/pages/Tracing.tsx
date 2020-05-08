@@ -1,7 +1,7 @@
 import Network, { Edge, Graph, Node } from "components/Graph";
 import SearchSection from "components/SearchSection";
 import Alert from "components/styled/Alert";
-import { main } from "constants/colors";
+import { background } from "constants/colors";
 import { endpoint } from "constants/config";
 import { Store } from "context";
 import React, { useContext, useEffect, useMemo, useState } from "react";
@@ -147,10 +147,10 @@ const App: React.FC = () => {
   }, [state.trace]);
 
   return (
-    <div className="p-2 align-items-center" style={{ background: main, padding: "2%", minHeight: "100vh" }}>
+    <div className="p-2 align-items-center" style={{ background, padding: "2%", minHeight: "100vh" }}>
       <Alert visible={!!alert} message={alert} />
 
-      <SearchSection action={handleKeyPress} placeholder="Address" set={setAddress} />
+      <SearchSection action={handleKeyPress} title="Bitgodine Tracing" placeholder="Address" set={setAddress} />
       {status == "loading" ? (
         <Spinner
           style={{ width: "4rem", height: "4rem", left: "45%" }}

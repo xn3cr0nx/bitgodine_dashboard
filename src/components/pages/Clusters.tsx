@@ -1,6 +1,6 @@
 import Network, { Graph, Node, Edge } from "components/Graph";
 import SearchBar from "components/SearchBar";
-import { main } from "constants/colors";
+import { background } from "constants/colors";
 import React, { useState, useEffect, useMemo } from "react";
 import { Col, Container, Row, Spinner, UncontrolledAlert } from "reactstrap";
 import useFetch from "use-http";
@@ -131,7 +131,7 @@ const Clusters: React.FC = () => {
   }, [responseData]);
 
   return (
-    <div className="p-2 align-items-center" style={{ background: main, padding: "2%", minHeight: "100vh" }}>
+    <div className="p-2 align-items-center" style={{ background, padding: "2%", minHeight: "100vh" }}>
       {error && (
         <UncontrolledAlert
           color="danger"
@@ -150,7 +150,7 @@ const Clusters: React.FC = () => {
         </UncontrolledAlert>
       )}
 
-      <SearchSection action={handleKeyPress} placeholder="Address" set={setAddress} />
+      <SearchSection action={handleKeyPress} title="Bitgodine Clustering" placeholder="Address" set={setAddress} />
       {request.loading ? (
         <Spinner
           style={{ width: "4rem", height: "4rem", left: "45%" }}

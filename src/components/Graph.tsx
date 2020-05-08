@@ -1,6 +1,6 @@
 import React from "react";
 import Graph from "react-graph-vis";
-import { main, bitcoin, go } from "constants/colors";
+import { background, bitcoin, go } from "constants/colors";
 
 export interface Node {
   id: number;
@@ -76,7 +76,7 @@ const Network: React.FC<Graph> = ({ nodes, edges }) => {
       // getNetwork={network => {
       //   //  if you want access to vis.js network api you can set the state in a parent component using this property
       // }}
-      style={{ backgroundColor: main }}
+      style={{ background }}
     />
   );
 };

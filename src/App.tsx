@@ -1,12 +1,13 @@
 import SearchSection from "components/SearchSection";
 import Alert from "components/styled/Alert";
-import { main } from "constants/colors";
+import { background } from "constants/colors";
 import { endpoint } from "constants/config";
 import { Store } from "context";
 import { verifyNumber } from "libs/componentUtils";
 import React, { useContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
-import { Spinner } from "reactstrap";
+import { Spinner, Container } from "reactstrap";
+import Block from "components/Block";
 
 export enum Request {
   Block = "BLOCK",
@@ -34,7 +35,7 @@ const App: React.FC = () => {
           await mutate(endpoint + "blocks/" + search);
         } else if (search.startsWith("000000")) {
           setRequestType(Request.Block);
-          await mutate(endpoint + "blocks/" + search);
+          await mutate(endpoint + "block/" + search);
         } else {
           setRequestType(Request.Tx);
           await mutate(endpoint + "tx/" + search);
@@ -44,6 +45,10 @@ const App: React.FC = () => {
       }
     }
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     (async (): Promise<void> => {
@@ -68,10 +73,6 @@ const App: React.FC = () => {
     console.log("SOMETHING CHANGED", data, status, error);
   }, [data, status, error]);
 
-  // useEffect(() => {
-  //   setUrl(endpoint.concat("trace/address/" + search));
-  // }, [search]);
-
   useEffect(() => {
     if (error) {
       setAlert((error as any).message);
@@ -82,20 +83,28 @@ const App: React.FC = () => {
   }, [error]);
 
   return (
-    <div className="p-2 align-items-center" style={{ background: main, padding: "2%", minHeight: "100vh" }}>
+    <div className="p-2 align-items-center" style={{ background, padding: "2%", minHeight: "100vh" }}>
       <Alert visible={!!alert} message={alert} />
 
       <SearchSection action={handleKeyPress} placeholder="Block height, hash, transaction, address" set={setSearch} />
-      {status == "loading" ? (
-        <Spinner
-          style={{ width: "4rem", height: "4rem", left: "45%" }}
-          className="noUi-value"
-          type="grow"
-          color="info"
-        />
-      ) : (
-        false
-      )}
+      <Container>
+        {status == "loading" ? (
+          <Spinner
+            style={{ width: "4rem", height: "4rem", left: "45%", marginTop: "2rem" }}
+            className="noUi-value"
+            type="grow"
+            color="info"
+          />
+        ) : requestType == Request.Block && state.block ? (
+          <Block block={state.block} />
+        ) : requestType == Request.Tx && state.transaction ? (
+          <Block block={state.block} />
+        ) : requestType == Request.Address && state.address ? (
+          <Block block={state.block} />
+        ) : (
+          false
+        )}
+      </Container>
     </div>
   );
 };

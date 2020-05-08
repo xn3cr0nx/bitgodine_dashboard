@@ -3,12 +3,13 @@ import React from "react";
 import { Col, Container, Row } from "reactstrap";
 
 interface SearchProps {
+  title?: string;
   placeholder?: string;
   set: (value: string) => void;
   action: (event: React.KeyboardEvent<Element>) => Promise<void>;
 }
 
-const SearchSection: React.FC<SearchProps> = ({ action, placeholder, set }) => {
+const SearchSection: React.FC<SearchProps> = ({ action, title, placeholder, set }) => {
   return (
     <Container onKeyPress={action}>
       <Row className="p-8 align-items-center">
@@ -21,7 +22,7 @@ const SearchSection: React.FC<SearchProps> = ({ action, placeholder, set }) => {
           />
         </Col>
         <Col sm="6">
-          <h3 className="mb-0 font-weight-bold text-uppercase text-muted text-primary">Bitgodine Explorer</h3>
+          <h3 className="mb-0 font-weight-bold text-uppercase text-white">{title ?? "Bitgodine Explorer"}</h3>
         </Col>
       </Row>
       <Row>

@@ -1,7 +1,21 @@
 import React, { createContext, useReducer } from "react";
 
+export interface Block {
+  id: string;
+  previousBlockHash: string;
+  merkle_root: string;
+  bits: number;
+  nonce: number;
+  size: number;
+  timestamp: Date;
+  transactions: string[];
+  tx_count: number;
+  version: number;
+  weight: number;
+}
+
 interface State {
-  block: any;
+  block: Block | null;
   transaction: any;
   address: any;
   trace: any;
@@ -14,9 +28,9 @@ export interface ReducerAction {
 }
 
 const initialState: State = {
-  block: {},
-  transaction: {},
-  address: {},
+  block: null,
+  transaction: null,
+  address: null,
   trace: {},
   cluster: {},
 };
