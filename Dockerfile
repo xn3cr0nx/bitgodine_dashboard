@@ -1,11 +1,13 @@
 FROM node:13 as build-deps
 
-COPY . /usr/src/app
-
 WORKDIR /usr/src/app
 
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 
-RUN npm install
+RUN npm ci --production
+
+COPY . /usr/src/app
 
 RUN npm run build
 

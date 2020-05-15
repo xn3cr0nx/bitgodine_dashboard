@@ -8,12 +8,24 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import { Spinner } from "reactstrap";
 
+// interface Trace {
+//   txid: string;
+//   receiver: string;
+//   vout: number;
+//   amount: number;
+//   next: string;
+//   weight?: number;
+// }
 interface Trace {
+  txid: string;
+  next: Next[];
+}
+
+interface Next {
   txid: string;
   receiver: string;
   vout: number;
   amount: number;
-  next: string;
   weight?: number;
 }
 
@@ -25,6 +37,7 @@ const App: React.FC = () => {
   const [address, setAddress] = useState("");
   const [alert, setAlert] = useState("");
   const [prev, setPrev] = useState("");
+  const [physics, setPhysics] = useState(false);
   const { state, dispatch } = useContext(Store);
   const [mutate, { status, data, error }] = useMutation(fetchSearch);
 
@@ -75,6 +88,48 @@ const App: React.FC = () => {
     }
   }, [error]);
 
+  const exploreTrace = (
+    trace: Trace,
+    prev: number | undefined,
+    index: number,
+    weight: number | undefined,
+  ): { nodes: Node[]; edges: Edge[] } => {
+    const nodes: Node[] = [];
+    const edges: Edge[] = [];
+
+    const node: Node = {
+      id: index,
+      label: trace.txid,
+      title: JSON.stringify(state.trace.traces[trace.txid]),
+    };
+    nodes.push(node);
+
+    if (prev != undefined) {
+      const edge: Edge = {
+        from: prev,
+        to: index,
+        label: JSON.stringify(weight),
+      };
+      edges.push(edge);
+    }
+
+    let incr = 0;
+    trace.next.forEach(n => {
+      if (state.trace.traces[n.txid]) {
+        const { nodes: recNodes, edges: resEdges } = exploreTrace(
+          state.trace.traces[n.txid],
+          index,
+          index + incr + 1,
+          n.weight,
+        );
+        nodes.push(...recNodes);
+        edges.push(...resEdges);
+        incr += recNodes.length;
+      }
+    });
+    return { nodes, edges };
+  };
+
   const graph = useMemo((): Graph => {
     const graph: Graph = { nodes: [], edges: [] };
     if (state.trace && (state.trace?.traces ?? false)) {
@@ -82,7 +137,7 @@ const App: React.FC = () => {
       for (const t of Object.keys(state.trace.traces)) {
         let found = false;
         for (const c of Object.keys(state.trace.traces)) {
-          if (state.trace.traces[c].next == t) {
+          if (state.trace.traces[c]?.next.map((n: Next) => n.txid).includes(t)) {
             found = true;
           }
         }
@@ -90,73 +145,16 @@ const App: React.FC = () => {
           traces.push(state.trace.traces[t]);
         }
       }
+      console.log("the traces", traces);
 
-      if (traces.length > 1) {
-        for (let t of traces) {
-          const flows: Trace[] = [t];
-          while (true) {
-            if (state.trace.traces[t.next]) {
-              flows.push(state.trace.traces[t.next]);
-              t = state.trace.traces[t.next];
-            } else {
-              break;
-            }
-          }
-
-          flows.forEach((f: Trace, i: number) => {
-            const node: Node = {
-              id: i,
-              label: f.txid,
-              title: JSON.stringify(f),
-            };
-            graph.nodes.push(node);
-            if (i > 0) {
-              const edge: Edge = {
-                from: i - 1,
-                to: i,
-                label: JSON.stringify(f.weight),
-              };
-              graph.edges.push(edge);
-            }
-          });
-        }
-        return graph;
-      } else {
-        if (!traces.length) {
-          setAlert("Empty Flow");
-          return graph;
-        }
-        let t = traces[0];
-        while (true) {
-          if (state.trace.traces[t.next]) {
-            if (t.next == "?") {
-            }
-            traces.push(state.trace.traces[t.next]);
-            t = state.trace.traces[t.next];
-          } else {
-            break;
-          }
-        }
-
-        traces.forEach((f: Trace, i: number) => {
-          const node: Node = {
-            id: i,
-            label: f.txid,
-            title: JSON.stringify(f),
-          };
-          graph.nodes.push(node);
-          if (i > 0) {
-            const edge: Edge = {
-              from: i - 1,
-              to: i,
-              label: JSON.stringify(f.weight),
-            };
-            graph.edges.push(edge);
-          }
-        });
-
-        return graph;
-      }
+      let incr = 0;
+      traces.forEach((trace, i) => {
+        const { nodes, edges } = exploreTrace(trace, undefined, i + incr, undefined);
+        graph.nodes.push(...nodes);
+        graph.edges.push(...edges);
+        console.log("received nodes and edges", nodes, edges);
+        incr += nodes.length;
+      });
     }
     return graph;
   }, [state.trace]);
@@ -174,7 +172,16 @@ const App: React.FC = () => {
           color="info"
         />
       ) : graph?.nodes?.length ?? false ? (
-        <Network graph={graph} style={{ marginTop: "1rem" }} />
+        <>
+          <label
+            className="custom-toggle"
+            style={{ position: "absolute", zIndex: 10, right: "2rem", marginTop: "2rem" }}>
+            <input type="checkbox" onClick={(): void => setPhysics(!physics)} />
+            <span className="custom-toggle-slider rounded-circle" />
+            <span style={{ color: "white", position: "absolute", top: "2rem" }}>Physics</span>
+          </label>
+          <Network graph={graph} physics={physics} style={{ marginTop: "1rem" }} />
+        </>
       ) : (
         false
       )}

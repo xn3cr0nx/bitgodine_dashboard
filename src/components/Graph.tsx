@@ -22,10 +22,11 @@ export interface Graph {
 
 export interface Props {
   graph: Graph;
+  physics?: boolean;
   style?: any;
 }
 
-const Network: React.FC<Props> = ({ graph, style }) => {
+const Network: React.FC<Props> = ({ graph, physics, style }) => {
   const options = {
     layout: {
       hierarchical: false,
@@ -64,6 +65,9 @@ const Network: React.FC<Props> = ({ graph, style }) => {
       hoverConnectedEdges: true,
       // navigationButtons: true,
       keyboard: false,
+    },
+    physics: {
+      enabled: physics,
     },
     height: "1000px",
   };
