@@ -159,7 +159,7 @@ const Clusters: React.FC = () => {
           color="info"
         />
       ) : data?.nodes?.length ?? false ? (
-        <Network nodes={data.nodes} edges={data.edges} />
+        <Network graph={data} />
       ) : (
         false
       )}

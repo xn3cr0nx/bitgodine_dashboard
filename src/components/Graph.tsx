@@ -12,6 +12,7 @@ export interface Node {
 export interface Edge {
   from: number;
   to: number;
+  label?: string;
 }
 
 export interface Graph {
@@ -19,7 +20,12 @@ export interface Graph {
   edges: Edge[];
 }
 
-const Network: React.FC<Graph> = ({ nodes, edges }) => {
+export interface Props {
+  graph: Graph;
+  style?: any;
+}
+
+const Network: React.FC<Props> = ({ graph, style }) => {
   const options = {
     layout: {
       hierarchical: false,
@@ -70,13 +76,13 @@ const Network: React.FC<Graph> = ({ nodes, edges }) => {
 
   return (
     <Graph
-      graph={{ nodes, edges }}
+      graph={graph}
       options={options}
       events={events}
       // getNetwork={network => {
       //   //  if you want access to vis.js network api you can set the state in a parent component using this property
       // }}
-      style={{ background }}
+      style={{ background, ...style }}
     />
   );
 };

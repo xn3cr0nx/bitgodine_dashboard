@@ -31,7 +31,7 @@ const initialState: State = {
   block: null,
   transaction: null,
   address: null,
-  trace: {},
+  trace: null,
   cluster: {},
 };
 export const Store = createContext<any>(initialState);
@@ -50,10 +50,15 @@ function reducer(state: State = initialState, { type, payload }: ReducerAction):
         block: payload,
       };
     case "TRACE":
-      console.log("GOT PAYLOAD", payload);
+      console.log("GOT TRACE", payload);
       return {
         ...state,
         trace: payload,
+      };
+    case "RESET_TRACE":
+      return {
+        ...state,
+        trace: null,
       };
     default:
       return state;

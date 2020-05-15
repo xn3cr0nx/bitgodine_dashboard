@@ -14,6 +14,7 @@ interface Trace {
   vout: number;
   amount: number;
   next: string;
+  weight?: number;
 }
 
 const fetchSearch = async (url: string): Promise<Response> => {
@@ -23,14 +24,22 @@ const fetchSearch = async (url: string): Promise<Response> => {
 const App: React.FC = () => {
   const [address, setAddress] = useState("");
   const [alert, setAlert] = useState("");
-  const [url, setUrl] = useState(endpoint);
+  const [prev, setPrev] = useState("");
   const { state, dispatch } = useContext(Store);
   const [mutate, { status, data, error }] = useMutation(fetchSearch);
 
   const handleKeyPress = async (event: React.KeyboardEvent<Element>): Promise<void> => {
     if (event.key === "Enter" && address) {
       try {
-        await mutate(url);
+        if (prev != address) {
+          if (state.trace) {
+            dispatch({
+              type: "RESET_TRACE",
+            });
+          }
+          await mutate(endpoint.concat("trace/address/" + address));
+          setPrev(address);
+        }
       } catch (error) {
         console.log("ERROR", error);
       }
@@ -41,6 +50,13 @@ const App: React.FC = () => {
     (async (): Promise<void> => {
       if (data && status == "success") {
         const payload = await data.json();
+        if (payload.code >= 400) {
+          setAlert(payload.error);
+          setTimeout(() => {
+            setAlert("");
+          }, 3000);
+          return;
+        }
         dispatch({
           type: "TRACE",
           payload,
@@ -50,11 +66,8 @@ const App: React.FC = () => {
   }, [data]);
 
   useEffect(() => {
-    setUrl(endpoint.concat("trace/address/" + address));
-  }, [address]);
-
-  useEffect(() => {
     if (error) {
+      console.log("ERROR", error);
       setAlert((error as any).message);
       setTimeout(() => {
         setAlert("");
@@ -101,6 +114,7 @@ const App: React.FC = () => {
               const edge: Edge = {
                 from: i - 1,
                 to: i,
+                label: JSON.stringify(f.weight),
               };
               graph.edges.push(edge);
             }
@@ -135,6 +149,7 @@ const App: React.FC = () => {
             const edge: Edge = {
               from: i - 1,
               to: i,
+              label: JSON.stringify(f.weight),
             };
             graph.edges.push(edge);
           }
@@ -159,7 +174,7 @@ const App: React.FC = () => {
           color="info"
         />
       ) : graph?.nodes?.length ?? false ? (
-        <Network nodes={graph.nodes} edges={graph.edges} />
+        <Network graph={graph} style={{ marginTop: "1rem" }} />
       ) : (
         false
       )}
