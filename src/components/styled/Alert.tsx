@@ -13,7 +13,7 @@ const Alert: React.FC<Props> = ({ visible, message, type, style }) => {
   return (
     <UncontrolledAlert
       color={type ?? "danger"}
-      className="align-items-center w-50 position-absolute mr-auto ml-auto"
+      className="align-items-center w-50 position-fixed mr-auto ml-auto"
       style={{
         bottom: 0,
         zIndex: 1200,

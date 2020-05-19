@@ -9,6 +9,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Header from "components/layout/Header";
 import Footer from "components/layout/Footer";
 import { StoreProvider } from "context";
+import { QueryParamProvider } from "use-query-params";
 import { ReactQueryDevtools } from "react-query-devtools";
 
 import "assets/vendor/nucleo/css/nucleo.css";
@@ -20,12 +21,13 @@ ReactDOM.render(
     <ReactQueryDevtools initialIsOpen={false} />
     <StoreProvider>
       <BrowserRouter>
-        <Header />
-        <Switch>
-          <Route path="/" exact component={App} />
-          <Route path="/tracing" exact component={Tracing} />
-          <Route path="/clusters" exact component={Clusters} />
-          {/*<Route path="/login-page" exact render={props => <Login {...props} />} />
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <Header />
+          <Switch>
+            <Route path="/" exact component={App} />
+            <Route path="/tracing" exact component={Tracing} />
+            <Route path="/clusters" exact component={Clusters} />
+            {/*<Route path="/login-page" exact render={props => <Login {...props} />} />
         <Route
         path="/profile-page"
         exact
@@ -36,9 +38,10 @@ ReactDOM.render(
         exact
         render={props => <Register {...props} />}
       />*/}
-          <Redirect to="/" />
-        </Switch>
-        <Footer />
+            <Redirect to="/" />
+          </Switch>
+          <Footer />
+        </QueryParamProvider>
       </BrowserRouter>
     </StoreProvider>
   </React.StrictMode>,

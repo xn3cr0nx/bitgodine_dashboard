@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from "react";
 
 export interface Block {
   id: string;
-  previousBlockHash: string;
+  previousblockhash: string;
   merkle_root: string;
   bits: number;
   nonce: number;
@@ -12,6 +12,40 @@ export interface Block {
   tx_count: number;
   version: number;
   weight: number;
+}
+
+export interface Tx {
+  txid: string;
+  version: number;
+  locktime: number;
+  size: number;
+  weight: number;
+  fee: number;
+  input: Input[];
+  output: Output[];
+  // status:   []Status;
+}
+
+export interface Input {
+  txid: string;
+  vout: number;
+  is_coinbase: boolean;
+  scriptsig: string;
+  scriptsig_asm: string;
+  inner_redeemscript_asm: string;
+  inner_witnessscript_asm: string[];
+  sequence: number;
+  witness: [];
+  prevout: number;
+}
+
+export interface Output {
+  scriptpubkey: string;
+  scriptpubkey_asm: string;
+  scriptpubkey_type: string;
+  scriptpubkey_address: string;
+  value: number;
+  index: number;
 }
 
 interface State {
@@ -48,6 +82,22 @@ function reducer(state: State = initialState, { type, payload }: ReducerAction):
       return {
         ...state,
         block: payload,
+      };
+    case "RESET_BLOCK":
+      return {
+        ...state,
+        block: null,
+      };
+    case "TX":
+      console.log("GOT TX", payload);
+      return {
+        ...state,
+        transaction: payload,
+      };
+    case "RESET_TX":
+      return {
+        ...state,
+        transaction: null,
       };
     case "TRACE":
       console.log("GOT TRACE", payload);

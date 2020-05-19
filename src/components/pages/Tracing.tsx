@@ -8,14 +8,6 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import { Spinner } from "reactstrap";
 
-// interface Trace {
-//   txid: string;
-//   receiver: string;
-//   vout: number;
-//   amount: number;
-//   next: string;
-//   weight?: number;
-// }
 interface Trace {
   txid: string;
   next: Next[];
@@ -44,7 +36,7 @@ const App: React.FC = () => {
   const handleKeyPress = async (event: React.KeyboardEvent<Element>): Promise<void> => {
     if (event.key === "Enter" && address) {
       try {
-        if (prev != address) {
+        if (prev !== address) {
           if (state.trace) {
             dispatch({
               type: "RESET_TRACE",
@@ -61,7 +53,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     (async (): Promise<void> => {
-      if (data && status == "success") {
+      if (data && status === "success") {
         const payload = await data.json();
         if (payload.code >= 400) {
           setAlert(payload.error);
@@ -114,19 +106,21 @@ const App: React.FC = () => {
     }
 
     let incr = 0;
-    trace.next.forEach(n => {
-      if (state.trace.traces[n.txid]) {
-        const { nodes: recNodes, edges: resEdges } = exploreTrace(
-          state.trace.traces[n.txid],
-          index,
-          index + incr + 1,
-          n.weight,
-        );
-        nodes.push(...recNodes);
-        edges.push(...resEdges);
-        incr += recNodes.length;
-      }
-    });
+    if (trace.next) {
+      trace.next.forEach(n => {
+        if (state.trace.traces[n.txid]) {
+          const { nodes: recNodes, edges: resEdges } = exploreTrace(
+            state.trace.traces[n.txid],
+            index,
+            index + incr + 1,
+            n.weight,
+          );
+          nodes.push(...recNodes);
+          edges.push(...resEdges);
+          incr += recNodes.length;
+        }
+      });
+    }
     return { nodes, edges };
   };
 
@@ -137,7 +131,7 @@ const App: React.FC = () => {
       for (const t of Object.keys(state.trace.traces)) {
         let found = false;
         for (const c of Object.keys(state.trace.traces)) {
-          if (state.trace.traces[c]?.next.map((n: Next) => n.txid).includes(t)) {
+          if (state.trace.traces[c]?.next?.map((n: Next) => n.txid)?.includes(t) ?? false) {
             found = true;
           }
         }
@@ -177,7 +171,7 @@ const App: React.FC = () => {
             className="custom-toggle"
             style={{ position: "absolute", zIndex: 10, right: "2rem", marginTop: "2rem" }}>
             <input type="checkbox" onClick={(): void => setPhysics(!physics)} />
-            <span className="custom-toggle-slider rounded-circle" />
+            <span className="custom-toggle-slider rounded-circle bg-default" />
             <span style={{ color: "white", position: "absolute", top: "2rem" }}>Physics</span>
           </label>
           <Network graph={graph} physics={physics} style={{ marginTop: "1rem" }} />
