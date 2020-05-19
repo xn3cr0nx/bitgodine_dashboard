@@ -11,7 +11,7 @@ interface SearchProps {
 
 const SearchSection: React.FC<SearchProps> = ({ action, title, placeholder, set }) => {
   return (
-    <Container onKeyPress={action} style={{ marginBottom: "2rem", backdropFilter: "blur(5px)" }}>
+    <Container onKeyPress={action} style={{ marginBottom: "2rem" }}>
       <Row className="p-8 align-items-center">
         <Col sm="4">
           <img
@@ -30,14 +30,6 @@ const SearchSection: React.FC<SearchProps> = ({ action, title, placeholder, set 
           <SearchBar placeholder={placeholder} set={set} />
         </Col>
       </Row>
-      <div
-        className="w-100 shadow-lg position-absolute"
-        style={{
-          height: "1px",
-          left: 0,
-          backgroundColor: "#adb5bd",
-        }}
-      />
     </Container>
   );
 };

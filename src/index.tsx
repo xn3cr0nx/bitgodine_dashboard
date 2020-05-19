@@ -7,6 +7,7 @@ import Tracing from "components/pages/Tracing";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Header from "components/layout/Header";
+import PatternSection from "components/layout/PatternSection";
 import Footer from "components/layout/Footer";
 import { StoreProvider } from "context";
 import { QueryParamProvider } from "use-query-params";
@@ -23,6 +24,8 @@ ReactDOM.render(
       <BrowserRouter>
         <QueryParamProvider ReactRouterRoute={Route}>
           <Header />
+          <PatternSection />
+
           <Switch>
             <Route path="/" exact component={App} />
             <Route path="/tracing" exact component={Tracing} />

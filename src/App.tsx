@@ -1,16 +1,14 @@
+import Block from "components/Block";
 import SearchSection from "components/SearchSection";
 import Alert from "components/styled/Alert";
-import { background } from "constants/colors";
+import Tx from "components/Tx";
 import { endpoint } from "constants/config";
 import { Store } from "context";
 import { verifyNumber } from "libs/componentUtils";
 import React, { useContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
-import { Spinner, Container, Row, Col } from "reactstrap";
-import Block from "components/Block";
-import Tx from "components/Tx";
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
-import { useQueryParam, NumberParam, StringParam } from "use-query-params";
+import { Col, Container, Pagination, PaginationItem, PaginationLink, Row, Spinner } from "reactstrap";
+import { NumberParam, StringParam, useQueryParam } from "use-query-params";
 
 export enum Request {
   Block = "BLOCK",
@@ -131,7 +129,7 @@ const App: React.FC = () => {
   }, [error]);
 
   return (
-    <div className="p-2 align-items-center" style={{ background, padding: "2%", minHeight: "100vh" }}>
+    <div className="p-2 align-items-center bg-default" style={{ padding: "2%", minHeight: "100vh" }}>
       <Alert visible={!!alert} message={alert} />
 
       <SearchSection action={handleKeyPress} placeholder="Block height, hash, transaction, address" set={setSearch} />

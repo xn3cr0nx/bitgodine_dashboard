@@ -40,7 +40,7 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
               {f.toUpperCase()}
             </p>
             <p
-              className="m-0"
+              className="m-0 text-nowrap"
               onClick={(): void => {
                 if (f == "id") setIsCopied((block as any)[f]);
               }}
