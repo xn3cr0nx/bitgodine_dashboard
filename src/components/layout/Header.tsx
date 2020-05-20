@@ -45,7 +45,10 @@ const Header: React.FC = () => {
         <NavbarBrand className="mr-lg-5" to="/" tag={Link}>
           <img alt="bitgodine" src={require("assets/img/brand/bitgodine_finder.png")} /> bitgodine
         </NavbarBrand>
-        <button className="navbar-toggler" id="navbar-default">
+        <button
+          className="navbar-toggler"
+          // id="navbar-default"
+          id="navbar_global">
           <span className="navbar-toggler-icon" />
         </button>
         <UncontrolledCollapse
@@ -57,9 +60,9 @@ const Header: React.FC = () => {
           <div className="navbar-collapse-header">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <Link to="/">
-                  <img alt="..." src={require("assets/img/brand/argon-react.png")} />
-                </Link>
+                <NavbarBrand className="mr-lg-5 text-default" to="/" tag={Link}>
+                  <img alt="..." src={require("assets/img/brand/bitgodine_finder.png")} /> bitgodine
+                </NavbarBrand>
               </Col>
               <Col className="collapse-close" xs="6">
                 <button className="navbar-toggler" id="navbar_global">
