@@ -21,7 +21,7 @@ export default function PatternSection() {
         <span />
         <span />
       </div>
-      <div className="separator separator-bottom separator-skew">
+      <div className="separator separator-bottom separator-skew" style={{ bottom: "-1px" }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"

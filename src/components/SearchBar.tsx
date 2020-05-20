@@ -15,7 +15,7 @@ const Inputs: React.FC<SearchProps> = ({ placeholder, set }) => {
       className={classnames({
         focused: search,
       })}>
-      <InputGroup className="input-group-alternative mb-2">
+      <InputGroup className="input-group-alternative mb-2" size="lg">
         <InputGroupAddon addonType="prepend">
           <InputGroupText>
             <i className="fa fa-bitcoin" />

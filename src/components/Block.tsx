@@ -3,9 +3,8 @@ import { background, textColor } from "constants/colors";
 import { Block as BlockProps } from "context";
 import React, { useMemo, useState } from "react";
 import { useCopyClipboard } from "react-recipes";
-import { Link } from "react-router-dom";
-import { Card, CardBody, CardHeader, CardText, CardTitle } from "reactstrap";
 import Paginate from "./Paginate";
+import TxCard from "./TxCard";
 
 interface Props {
   block: BlockProps;
@@ -32,15 +31,10 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
           <div
             key={i}
             className="w-100 flex flex-row p-3 font-weight-bold"
-            style={{
-              display: "flex",
-              borderBottom: "1px solid #adb5bd",
-            }}>
-            <p className="m-0 font-weight-bold" style={{ flexBasis: "100%" }}>
-              {f.toUpperCase()}
-            </p>
+            style={{ borderBottom: "1px solid #adb5bd" }}>
+            <p className="m-0 font-weight-bold flex-fill">{f.toUpperCase()}</p>
             <p
-              className="m-0 text-nowrap"
+              className="m-0 font-weight-normal text-nowrap"
               onClick={(): void => {
                 if (f == "id") setIsCopied((block as any)[f]);
               }}
@@ -51,25 +45,15 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
         );
       })}
 
-      {txsList && (
+      {/*txsList && (
         <Paginate
-          list={block.transactions.map(tx => {
-            return (
-              <Card key={tx} className="mt-1 mb-1">
-                <CardHeader className="text-dark">
-                  <Link to={`?tx=${tx}`}>{tx}</Link>
-                </CardHeader>
-                <CardBody className="text-dark">
-                  <CardTitle>Special Title Treatment</CardTitle>
-                  <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-                </CardBody>
-              </Card>
-            );
-          })}
+          list={block.transactions.map((tx, i) => (
+            <TxCard key={i} tx={tx} />
+          ))}
           index={index}
           setIndex={setIndex}
         />
-      )}
+          )*/}
     </div>
   );
 };

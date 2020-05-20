@@ -173,7 +173,7 @@ const App: React.FC = () => {
             style={{ position: "absolute", zIndex: 10, right: "2rem", marginTop: sectionPatternMargin }}>
             <input type="checkbox" onClick={(): void => setPhysics(!physics)} />
             <span className="custom-toggle-slider rounded-circle bg-default" />
-            <span style={{ color: "white", position: "absolute", top: "2rem" }}>Physics</span>
+            <span style={{ color: "white", position: "absolute", top: "2rem" }}>Gravity</span>
           </label>
           <Network
             graph={graph}

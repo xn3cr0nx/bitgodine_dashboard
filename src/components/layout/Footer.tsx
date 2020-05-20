@@ -5,11 +5,11 @@ import { Button, Col, Container, Nav, NavItem, NavLink, Row, UncontrolledTooltip
 // style={{ position: "fixed", left: 0, bottom: 0, width: "100%", textAlign: "center" }}>
 const CardsFooter: React.FC = () => {
   return (
-    <footer className="footer has-cards">
+    <footer className="footer has-cards" style={{ marginTop: "-460px" }}>
       <Container>
         <Row className="row-grid align-items-center my-md">
           <Col lg="6">
-            <h3 className="text-primary font-weight-light mb-2">Support us!</h3>
+            <h3 className="text-default font-weight-light mb-2">Support us!</h3>
             <h4 className="mb-0 font-weight-light">Donate to keep open source development ongoing</h4>
             <Row xs="4">
               <Col xs="1">

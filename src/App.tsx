@@ -38,12 +38,21 @@ const App: React.FC = () => {
       if (verifyNumber(search)) {
         setRequestType(Request.Block);
         setHeight(parseInt(search));
+        if (block) setBlock(undefined);
+        if (tx) setTx(undefined);
+        if (address) setAddress(undefined);
       } else if (search.startsWith("000000")) {
         setRequestType(Request.Block);
         setBlock(search);
+        if (height) setHeight(undefined);
+        if (tx) setTx(undefined);
+        if (address) setAddress(undefined);
       } else {
         setRequestType(Request.Tx);
         setTx(search);
+        if (block) setBlock(undefined);
+        if (height) setHeight(undefined);
+        if (address) setAddress(undefined);
       }
     }
   };
