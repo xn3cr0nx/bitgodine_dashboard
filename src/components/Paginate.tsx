@@ -17,10 +17,9 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
       <PaginationItem>
         <PaginationLink
           aria-label="Previous"
-          href="#pablo"
           onClick={(e): void => {
             e.preventDefault();
-            if (index == 1) return;
+            if (!index) return;
             setIndex(index - 1);
           }}>
           <i className="fa fa-angle-left" />
@@ -29,10 +28,9 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
       </PaginationItem>
       {Array.from(Array(Math.ceil(list.length / pageLength)).keys()).map((n, i) => {
         return (
-          <PaginationItem key={i} className={index == i ? "active" : ""}>
+          <PaginationItem key={i}>
             <PaginationLink
-              href="#pablo"
-              className="bg-default border-white"
+              className={index == i ? "bg-default text-white" : ""}
               onClick={(e): void => {
                 e.preventDefault();
                 setIndex(i);
@@ -45,11 +43,10 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
       <PaginationItem>
         <PaginationLink
           aria-label="Next"
-          href="#pablo"
           onClick={(e): void => {
             e.preventDefault();
-            if (index == Math.ceil(list.length / pageLength)) return;
-            setIndex(index);
+            if (index == Math.ceil(list.length / pageLength) - 1) return;
+            setIndex(index + 1);
           }}>
           <i className="fa fa-angle-right" />
           <span className="sr-only">Next</span>

@@ -11,6 +11,7 @@ import { Col, Container, Pagination, PaginationItem, PaginationLink, Row, Spinne
 import { NumberParam, StringParam, useQueryParam } from "use-query-params";
 
 export enum Request {
+  Empty = "",
   Block = "BLOCK",
   Tx = "TX",
   Address = "ADDRESS",
@@ -23,7 +24,6 @@ const fetchSearch = async (url: string): Promise<Response> => {
 const App: React.FC = () => {
   const [search, setSearch] = useState("");
   const [alert, setAlert] = useState("");
-  // const [url, setUrl] = useState(endpoint);
   const [requestType, setRequestType] = useState<Request>();
   const { state, dispatch } = useContext(Store);
   const [mutate, { status, data, error }] = useMutation(fetchSearch);
@@ -35,22 +35,24 @@ const App: React.FC = () => {
 
   const handleKeyPress = async (event: React.KeyboardEvent<Element>): Promise<void> => {
     if (event.key === "Enter" && search) {
-      try {
-        if (verifyNumber(search)) {
-          setRequestType(Request.Block);
-          setHeight(parseInt(search));
-        } else if (search.startsWith("000000")) {
-          setRequestType(Request.Block);
-          setBlock(search);
-        } else {
-          setRequestType(Request.Tx);
-          setTx(search);
-        }
-      } catch (error) {
-        console.log("ERROR", error);
+      if (verifyNumber(search)) {
+        setRequestType(Request.Block);
+        setHeight(parseInt(search));
+      } else if (search.startsWith("000000")) {
+        setRequestType(Request.Block);
+        setBlock(search);
+      } else {
+        setRequestType(Request.Tx);
+        setTx(search);
       }
     }
   };
+
+  useEffect(() => {
+    if ([tx, block, height, address].every(e => !e)) {
+      setRequestType(Request.Empty);
+    }
+  }, [tx, block, height, address]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -81,7 +83,6 @@ const App: React.FC = () => {
       (async (): Promise<void> => {
         setRequestType(Request.Block);
         await mutate(endpoint + "block-height/" + height);
-        // window.scrollTo(0, 0);
       })();
     }
   }, [height]);
