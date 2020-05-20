@@ -38,13 +38,13 @@ const App: React.FC = () => {
       try {
         if (verifyNumber(search)) {
           setRequestType(Request.Block);
-          await mutate(endpoint + "block-height/" + search);
+          setHeight(parseInt(search));
         } else if (search.startsWith("000000")) {
           setRequestType(Request.Block);
-          await mutate(endpoint + "block/" + search);
+          setBlock(search);
         } else {
           setRequestType(Request.Tx);
-          await mutate(endpoint + "tx/" + search);
+          setTx(search);
         }
       } catch (error) {
         console.log("ERROR", error);
@@ -81,7 +81,7 @@ const App: React.FC = () => {
       (async (): Promise<void> => {
         setRequestType(Request.Block);
         await mutate(endpoint + "block-height/" + height);
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
       })();
     }
   }, [height]);
@@ -150,24 +150,27 @@ const App: React.FC = () => {
                 </Col>
                 <Col xs="1" className="pl-0">
                   <Pagination className="pagination pagination-lg" listClassName="pagination-lg">
-                    <PaginationItem>
-                      <PaginationLink
-                        aria-label="Previous"
-                        href="#pablo"
-                        onClick={(e): void => {
-                          e.preventDefault();
-                        }}>
-                        <i className="fa fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
+                    {state.block.height && (
+                      <PaginationItem>
+                        <PaginationLink
+                          aria-label="Previous"
+                          onClick={(e): void => {
+                            e.preventDefault();
+                            setHeight(state.block.height - 1);
+                            setSearch("");
+                          }}>
+                          <i className="fa fa-angle-left" />
+                          <span className="sr-only">Previous</span>
+                        </PaginationLink>
+                      </PaginationItem>
+                    )}
                     <PaginationItem>
                       <PaginationLink
                         aria-label="Next"
-                        href="#pablo"
                         onClick={(e): void => {
                           e.preventDefault();
-                          // setIndex(index + 1);
+                          setHeight(state.block.height + 1);
+                          setSearch("");
                         }}>
                         <i className="fa fa-angle-right" />
                         <span className="sr-only">Next</span>

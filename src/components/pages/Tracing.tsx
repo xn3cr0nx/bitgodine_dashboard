@@ -1,8 +1,9 @@
 import Network, { Edge, Graph, Node } from "components/Graph";
 import SearchSection from "components/SearchSection";
 import Alert from "components/styled/Alert";
-import { background } from "constants/colors";
+import { background, bitcoin } from "constants/colors";
 import { endpoint } from "constants/config";
+import { sectionPatternMargin } from "constants/variables";
 import { Store } from "context";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
@@ -169,12 +170,16 @@ const App: React.FC = () => {
         <>
           <label
             className="custom-toggle"
-            style={{ position: "absolute", zIndex: 10, right: "2rem", marginTop: "2rem" }}>
+            style={{ position: "absolute", zIndex: 10, right: "2rem", marginTop: sectionPatternMargin }}>
             <input type="checkbox" onClick={(): void => setPhysics(!physics)} />
             <span className="custom-toggle-slider rounded-circle bg-default" />
             <span style={{ color: "white", position: "absolute", top: "2rem" }}>Physics</span>
           </label>
-          <Network graph={graph} physics={physics} style={{ marginTop: "1rem" }} />
+          <Network
+            graph={graph}
+            physics={physics}
+            style={{ marginTop: sectionPatternMargin, borderWidth: 1, borderColor: bitcoin }}
+          />
         </>
       ) : (
         false
