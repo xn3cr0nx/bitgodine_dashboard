@@ -168,6 +168,7 @@ const App: React.FC = () => {
                             e.preventDefault();
                             setHeight(state.block.height - 1);
                             setSearch("");
+                            if (block) setBlock(undefined);
                           }}>
                           <i className="fa fa-angle-left" />
                           <span className="sr-only">Previous</span>
@@ -181,6 +182,7 @@ const App: React.FC = () => {
                           e.preventDefault();
                           setHeight(state.block.height + 1);
                           setSearch("");
+                          if (block) setBlock(undefined);
                         }}>
                         <i className="fa fa-angle-right" />
                         <span className="sr-only">Next</span>

@@ -28,37 +28,31 @@ const TxCard: React.FC<Props> = ({ tx, className, style }) => {
           <Col style={{ flex: "0 0 50%", maxWidth: "47%" }}>
             {tx.input.map((input, i) => {
               return (
-                <Card key={i} className="shadow-lg bg-default border-0">
-                  <CardHeader className="py-2 bg-default flex flex-row border-bottom">
-                    <p
-                      className="description font-weight-normal mb-0 mr-3"
-                      style={{ marginLeft: "-1rem" }}>{`#${i}`}</p>
-                    <p className="description font-weight-normal text-break mb-0">
+                <Card key={i} className="shadow-lg bg-default border-0 mb-3">
+                  <CardHeader className="py-2 bg-default flex flex-row border-bottom rounded-bottom">
+                    <p className="text-sm font-weight-normal mb-0 mr-3" style={{ marginLeft: "-1rem" }}>{`#${i}`}</p>
+                    <p className="text-sm font-weight-normal text-break mb-0">
                       {/* missing :n output to txid */}
                       {input.is_coinbase ? "Coinbase" : `${input.txid}:${input.vout}`}
                     </p>
                   </CardHeader>
                   {details && (
-                    <CardBody className="py-2 bg-default flex flex-column">
-                      <div className=" flex flex-row w-100 mb-3">
-                        <p className="description font-weight-normal mb-0 mr-3 flex-fill text-uppercase">
-                          scriptSig (asm)
-                        </p>
-                        <p className="description mb-0 flex flex-nowrap text-break">{input.scriptsig_asm}</p>
+                    <CardBody className="py-2 bg-default flex flex-column rounded-bottom">
+                      <div className="flex flex-row w-100 mb-3">
+                        <p className="text-sm font-weight-normal mb-0 mr-3 flex-fill text-uppercase">scriptSig (asm)</p>
+                        <p className="text-sm mb-0 flex flex-nowrap text-break">{input.scriptsig_asm}</p>
                       </div>
-                      <div className=" flex flex-row w-100 mb-3">
-                        <p className="description font-weight-normal mb-0 mr-3 flex-fill text-uppercase">
-                          scriptSig (hex)
-                        </p>
-                        <p className="description mb-0 flex flex-nowrap  text-break">{input.scriptsig}</p>
+                      <div className="flex flex-row w-100 mb-3">
+                        <p className="text-sm font-weight-normal mb-0 mr-3 flex-fill text-uppercase">scriptSig (hex)</p>
+                        <p className="text-sm mb-0 flex flex-nowrap  text-break">{input.scriptsig}</p>
                       </div>
-                      <div className=" flex flex-row w-100 mb-3">
-                        <p className="description font-weight-normal mb-0 flex-fill text-uppercase">nsequence</p>
-                        <p className="description mb-0 flex flex-nowrap">{input.sequence}</p>
+                      <div className="flex flex-row w-100 mb-3">
+                        <p className="text-sm font-weight-normal mb-0 flex-fill text-uppercase">nsequence</p>
+                        <p className="text-sm mb-0 flex flex-nowrap">{input.sequence}</p>
                       </div>
-                      <div className=" flex flex-row w-100 mb-3">
-                        <p className="description font-weight-normal mb-0 flex-fill text-uppercase">prevout</p>
-                        <p className="description mb-0 flex flex-nowrap">{input.prevout}</p>
+                      <div className="flex flex-row w-100 mb-3">
+                        <p className="text-sm font-weight-normal mb-0 flex-fill text-uppercase">prevout</p>
+                        <p className="text-sm mb-0 flex flex-nowrap">{input.prevout}</p>
                       </div>
                     </CardBody>
                   )}
@@ -72,35 +66,33 @@ const TxCard: React.FC<Props> = ({ tx, className, style }) => {
           <Col style={{ flex: "0 0 50%", maxWidth: "47%" }}>
             {tx.output.map((output, i) => {
               return (
-                <Card key={i} className="shadow-lg bg-default border-0">
-                  <CardHeader className="py-2 bg-default flex flex-row border-bottom">
-                    <p
-                      className="description font-weight-normal mb-0 mr-3"
-                      style={{ marginLeft: "-1rem" }}>{`#${i}`}</p>
-                    <p className="description font-weight-normal mb-0 flex-fill">
+                <Card key={i} className="shadow-lg bg-default border-0 mb-3">
+                  <CardHeader className="py-2 bg-default flex flex-row border-bottom rounded-bottom">
+                    <p className="text-sm font-weight-normal mb-0 mr-3" style={{ marginLeft: "-1rem" }}>{`#${i}`}</p>
+                    <p className="text-sm font-weight-normal mb-0 flex-fill">
                       {output.scriptpubkey_address ? output.scriptpubkey_address : "OP_RETURN"}
                     </p>
-                    <p className="description font-weight-normal mb-0 flex flex-nowrap">{`${satToBtc(
-                      output.value,
+                    <p className="text-sm font-weight-normal mb-0 flex flex-nowrap">{`${satToBtc(output.value).toFixed(
+                      2,
                     )} BTC`}</p>
                   </CardHeader>
                   {details && (
-                    <CardBody className="py-2 bg-default flex flex-column">
-                      <div className=" flex flex-row w-100 mb-3">
-                        <p className="description font-weight-normal mb-0 flex-fill text-uppercase">Type</p>
-                        <p className="description mb-0 flex flex-nowrap text-uppercase">{output.scriptpubkey_type}</p>
+                    <CardBody className="py-2 bg-default flex flex-column rounded-bottom">
+                      <div className="flex flex-row w-100 mb-3">
+                        <p className="text-sm font-weight-normal mb-0 flex-fill text-uppercase">Type</p>
+                        <p className="text-sm mb-0 flex flex-nowrap text-uppercase">{output.scriptpubkey_type}</p>
                       </div>
-                      <div className=" flex flex-row w-100 mb-3">
-                        <p className="description font-weight-normal mb-0 mr-3 flex-fill text-uppercase">
+                      <div className="flex flex-row w-100 mb-3">
+                        <p className="text-sm font-weight-normal mb-0 mr-3 flex-fill text-uppercase">
                           scriptPubKey (asm)
                         </p>
-                        <p className="description mb-0 flex flex-nowrap text-break">{output.scriptpubkey_asm}</p>
+                        <p className="text-sm mb-0 flex flex-nowrap text-break">{output.scriptpubkey_asm}</p>
                       </div>
-                      <div className=" flex flex-row w-100 mb-3">
-                        <p className="description font-weight-normal mb-0 mr-3 flex-fill text-uppercase">
+                      <div className="flex flex-row w-100 mb-3">
+                        <p className="text-sm font-weight-normal mb-0 mr-3 flex-fill text-uppercase">
                           scriptPubKey (hex)
                         </p>
-                        <p className="description mb-0 flex flex-nowrap  text-break">{output.scriptpubkey}</p>
+                        <p className="text-sm mb-0 flex flex-nowrap  text-break">{output.scriptpubkey}</p>
                       </div>
                     </CardBody>
                   )}

@@ -48,7 +48,7 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
       {txsList && (
         <Paginate
           list={block.transactions.map((tx, i) => (
-            <TxCard key={i} tx={tx} />
+            <TxCard key={i} tx={tx} className="mb-3" />
           ))}
           index={index}
           setIndex={setIndex}
