@@ -45,7 +45,7 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
         );
       })}
 
-      {/*txsList && (
+      {txsList && (
         <Paginate
           list={block.transactions.map((tx, i) => (
             <TxCard key={i} tx={tx} />
@@ -53,7 +53,7 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
           index={index}
           setIndex={setIndex}
         />
-          )*/}
+      )}
     </div>
   );
 };
