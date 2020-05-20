@@ -8,7 +8,7 @@ export interface Block {
   nonce: number;
   size: number;
   timestamp: Date;
-  transactions: string[];
+  transactions: Tx[];
   tx_count: number;
   version: number;
   weight: number;

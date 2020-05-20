@@ -1,1 +1,2 @@
+export const coinbase = "0000000000000000000000000000000000000000000000000000000000000000";
 export const sectionPatternMargin = "15rem";

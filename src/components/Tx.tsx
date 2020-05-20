@@ -1,7 +1,7 @@
 import { background, textColor } from "constants/colors";
 import { Tx as TxProps } from "context";
 import React, { useMemo } from "react";
-import { Card, CardBody, Col, Row, PaginationItem, PaginationLink } from "reactstrap";
+import TxCard from "./TxCard";
 
 interface Props {
   tx: TxProps;
@@ -21,53 +21,14 @@ const Tx: React.FC<Props> = ({ tx }) => {
         .filter(f => !["input", "output"].includes(f))
         .map((f, i) => {
           return (
-            <div
-              key={i}
-              className="w-100 flex flex-row p-3"
-              style={{
-                display: "flex",
-                borderBottom: "1px solid #adb5bd",
-              }}>
-              <p className="m-0 font-weight-bold" style={{ flexBasis: "100%" }}>
-                {f.toUpperCase()}
-              </p>
-              <p className="m-0">{(tx as any)[f]}</p>
+            <div key={i} className="w-100 flex flex-row p-3" style={{ borderBottom: "1px solid #adb5bd" }}>
+              <p className="m-0 font-weight-bold flex-fill">{f.toUpperCase()}</p>
+              <p className="m-0 font-weight-normal">{(tx as any)[f]}</p>
             </div>
           );
         })}
 
-      <Card className="mt-5">
-        <CardBody className="text-dark">
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              {tx.input.map((input, i) => {
-                return (
-                  <Row key={i}>
-                    <p>{input.txid}</p>
-                  </Row>
-                );
-              })}
-            </div>
-
-            <PaginationItem className="m-5">
-              <PaginationLink aria-label="Next" className="bg-default border-default">
-                <i className="fa fa-angle-right" />
-                <span className="sr-only">Next</span>
-              </PaginationLink>
-            </PaginationItem>
-
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              {tx.output.map((output, i) => {
-                return (
-                  <Row key={i}>
-                    <p>{`${output.index} - ${output.scriptpubkey_address} ${output.value}`}</p>
-                  </Row>
-                );
-              })}
-            </div>
-          </div>
-        </CardBody>
-      </Card>
+      <TxCard tx={tx} className="mt-4" />
     </div>
   );
 };
