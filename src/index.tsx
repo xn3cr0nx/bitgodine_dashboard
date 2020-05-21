@@ -1,36 +1,36 @@
+import "assets/scss/argon-design-system-react.scss?v1.1.0";
+import "assets/vendor/font-awesome/css/font-awesome.min.css";
+import "assets/vendor/nucleo/css/nucleo.css";
+import Footer from "components/layout/Footer";
+import Header from "components/layout/Header";
+import Clusters from "components/pages/Clusters";
+import Theme from "components/pages/Theme";
+import Tracing from "components/pages/Tracing";
+import { StoreProvider, ThemeProvider } from "context";
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import Clusters from "components/pages/Clusters";
-import Tracing from "components/pages/Tracing";
-import * as serviceWorker from "./serviceWorker";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import Header from "components/layout/Header";
-import PatternSection from "components/layout/PatternSection";
-import Footer from "components/layout/Footer";
-import { StoreProvider } from "context";
-import { QueryParamProvider } from "use-query-params";
 import { ReactQueryDevtools } from "react-query-devtools";
-
-import "assets/vendor/nucleo/css/nucleo.css";
-import "assets/vendor/font-awesome/css/font-awesome.min.css";
-import "assets/scss/argon-design-system-react.scss?v1.1.0";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { QueryParamProvider } from "use-query-params";
+import App from "./App";
+import "./index.css";
+import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
     <ReactQueryDevtools initialIsOpen={false} />
     <StoreProvider>
-      <BrowserRouter>
-        <QueryParamProvider ReactRouterRoute={Route}>
-          <Header />
-          <PatternSection />
+      <ThemeProvider>
+        <BrowserRouter>
+          <QueryParamProvider ReactRouterRoute={Route}>
+            <Header />
 
-          <Switch>
-            <Route path="/" exact component={App} />
-            <Route path="/tracing" exact component={Tracing} />
-            <Route path="/clusters" exact component={Clusters} />
-            {/*<Route path="/login-page" exact render={props => <Login {...props} />} />
+            <Switch>
+              <Route path="/" exact component={App} />
+              <Route path="/tracing" exact component={Tracing} />
+              <Route path="/clusters" exact component={Clusters} />
+              <Route path="/theme" exact component={Theme} />
+              {/*<Route path="/login-page" exact render={props => <Login {...props} />} />
         <Route
         path="/profile-page"
         exact
@@ -41,11 +41,12 @@ ReactDOM.render(
         exact
         render={props => <Register {...props} />}
       />*/}
-            <Redirect to="/" />
-          </Switch>
-          <Footer />
-        </QueryParamProvider>
-      </BrowserRouter>
+              <Redirect to="/" />
+            </Switch>
+            <Footer />
+          </QueryParamProvider>
+        </BrowserRouter>
+      </ThemeProvider>
     </StoreProvider>
   </React.StrictMode>,
   document.getElementById("root"),

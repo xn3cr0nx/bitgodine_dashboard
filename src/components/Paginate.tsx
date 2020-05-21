@@ -1,4 +1,6 @@
-import React, { SetStateAction } from "react";
+import cx from "classnames";
+import { Theme } from "context";
+import React, { SetStateAction, useContext } from "react";
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
 interface Props {
@@ -10,6 +12,8 @@ interface Props {
 const pageLength = 5;
 
 const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
+  const { theme } = useContext(Theme);
+
   return (
     <Pagination
       className="pagination justify-content-center pagination-lg mt-5"
@@ -30,7 +34,7 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
         return (
           <PaginationItem key={i}>
             <PaginationLink
-              className={index == i ? "bg-default text-white" : ""}
+              className={cx({ [`${theme} text-white`]: index == i })}
               onClick={(e): void => {
                 e.preventDefault();
                 setIndex(i);

@@ -1,5 +1,7 @@
 // import Headroom from "headroom.js";
-import React, { useState } from "react";
+import cx from "classnames";
+import { Theme } from "context";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -21,6 +23,7 @@ import {
 } from "reactstrap";
 
 const Header: React.FC = () => {
+  const { theme } = useContext(Theme);
   const [collapseClasses, setCollapseClasses] = useState("");
 
   const onExiting = (): void => {
@@ -40,7 +43,7 @@ const Header: React.FC = () => {
     /*<header>*/
   }
   return (
-    <Navbar className="w-100 navbar-horizontal navbar-dark bg-default" expand="lg" id="navbar">
+    <Navbar className={cx("w-100 navbar-horizontal navbar-dark", theme)} expand="lg" id="navbar">
       <Container>
         <NavbarBrand className="mr-lg-5" to="/" tag={Link}>
           <img alt="bitgodine" src={require("assets/img/brand/bitgodine_finder.png")} /> bitgodine
@@ -80,30 +83,39 @@ const Header: React.FC = () => {
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-xl">
                 <div className="dropdown-menu-inner">
+                  <Media className="d-flex align-items-center" href="/">
+                    <div className="icon icon-shape bg-gradient-indigo rounded-circle text-white">
+                      <i className="ni ni-map-big" />
+                    </div>
+                    <Media body className="ml-3">
+                      <h6 className="heading text-primary mb-md-1">Explorer</h6>
+                      <p className="description d-none d-md-inline-block mb-0">Bitcoin blockchain explorer</p>
+                    </Media>
+                  </Media>
                   <Media className="d-flex align-items-center" href="/tracing">
-                    <div className="icon icon-shape bg-gradient-primary rounded-circle text-white">
+                    <div className="icon icon-shape bg-gradient-default rounded-circle text-white">
                       <i className="ni ni-vector" />
                     </div>
                     <Media body className="ml-3">
-                      <h6 className="heading text-primary mb-md-1">Tracing</h6>
+                      <h6 className="heading text-default mb-md-1">Tracing</h6>
                       <p className="description d-none d-md-inline-block mb-0">
                         Bitcoin flow tracing visualization tool
                       </p>
                     </Media>
                   </Media>
                   <Media className="d-flex align-items-center" href="/clusters">
-                    <div className="icon icon-shape bg-gradient-success rounded-circle text-white">
+                    <div className="icon icon-shape bg-gradient-info rounded-circle text-white">
                       <i className="ni ni-planet" />
                     </div>
                     <Media body className="ml-3">
-                      <h6 className="heading text-primary mb-md-1">Clustering</h6>
+                      <h6 className="heading text-info mb-md-1">Clustering</h6>
                       <p className="description d-none d-md-inline-block mb-0">
                         Bitcoin addresses clustering visualization tool
                       </p>
                     </Media>
                   </Media>
                   <Media className="d-flex align-items-center" href="/test">
-                    <div className="icon icon-shape bg-gradient-warning rounded-circle text-white">
+                    <div className="icon icon-shape bg-gradient-danger rounded-circle text-white">
                       <i className="ni ni-tag" />
                     </div>
                     <Media body className="ml-3">
@@ -122,6 +134,9 @@ const Header: React.FC = () => {
                 <span className="nav-link-inner--text">Examples</span>
               </DropdownToggle>
               <DropdownMenu>
+                <DropdownItem to="/theme" tag={Link}>
+                  Theme
+                </DropdownItem>
                 <DropdownItem to="/landing-page" tag={Link}>
                   Landing
                 </DropdownItem>

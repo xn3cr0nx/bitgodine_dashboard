@@ -1,7 +1,9 @@
+import cx from "classnames";
 import Alert from "components/styled/Alert";
-import { background, textColor } from "constants/colors";
-import { Block as BlockProps } from "context";
-import React, { useMemo, useState } from "react";
+import { textColor } from "constants/colors";
+import { Theme } from "context";
+import { Block as BlockProps } from "context/store";
+import React, { useContext, useMemo, useState } from "react";
 import { useCopyClipboard } from "react-recipes";
 import Paginate from "./Paginate";
 import TxCard from "./TxCard";
@@ -12,6 +14,8 @@ interface Props {
 }
 
 const Block: React.FC<Props> = ({ block, txsList }) => {
+  const { theme } = useContext(Theme);
+
   const [isCopied, setIsCopied] = useCopyClipboard();
   const [index, setIndex] = useState(0);
 
@@ -23,7 +27,7 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
   }, [block]);
 
   return (
-    <div className="mb-5 w-100 card" style={{ borderRadius: "0.5rem", background, color: textColor }}>
+    <div className="mb-5 w-100 card bg-transparent text-white border-0">
       <Alert visible={isCopied} type="success" message={"Copied to cliboard"} />
 
       {Object.keys(blockFields).map((f, i) => {

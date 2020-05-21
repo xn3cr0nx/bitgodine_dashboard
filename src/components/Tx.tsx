@@ -1,6 +1,7 @@
-import { background, textColor } from "constants/colors";
-import { Tx as TxProps } from "context";
-import React, { useMemo } from "react";
+import cx from "classnames";
+import { Theme } from "context";
+import { Tx as TxProps } from "context/store";
+import React, { useContext, useMemo } from "react";
 import TxCard from "./TxCard";
 
 interface Props {
@@ -8,6 +9,8 @@ interface Props {
 }
 
 const Tx: React.FC<Props> = ({ tx }) => {
+  const { theme } = useContext(Theme);
+
   const txFields = useMemo(() => {
     return Object.keys(tx).reduce((acc, curr) => {
       if (!(acc as any)[curr] && !["transactions"].includes(curr)) (acc as any)[curr] = (tx as any)[curr];
@@ -16,12 +19,15 @@ const Tx: React.FC<Props> = ({ tx }) => {
   }, [tx]);
 
   return (
-    <div className="mb-5 w-100 card" style={{ borderRadius: "0.5rem", background, color: textColor }}>
+    <div className={cx("mb-5 w-100 card bg-transparent text-white border-0")}>
       {Object.keys(txFields)
         .filter(f => !["input", "output"].includes(f))
         .map((f, i) => {
           return (
-            <div key={i} className="w-100 flex flex-row p-3" style={{ borderBottom: "1px solid #adb5bd" }}>
+            <div
+              key={i}
+              className="w-100 flex flex-row p-3 font-weight-bold"
+              style={{ borderBottom: "1px solid #adb5bd" }}>
               <p className="m-0 font-weight-bold flex-fill">{f.toUpperCase()}</p>
               <p className="m-0 font-weight-normal">{(tx as any)[f]}</p>
             </div>

@@ -1,10 +1,12 @@
+import cx from "classnames";
 import Network, { Edge, Graph, Node } from "components/Graph";
+import PatternSection from "components/layout/PatternSection";
 import SearchSection from "components/SearchSection";
 import Alert from "components/styled/Alert";
-import { background, bitcoin } from "constants/colors";
+import { bitcoin } from "constants/colors";
 import { endpoint } from "constants/config";
 import { sectionPatternMargin } from "constants/variables";
-import { Store } from "context";
+import { Store, Theme } from "context";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import { Spinner } from "reactstrap";
@@ -27,6 +29,8 @@ const fetchSearch = async (url: string): Promise<Response> => {
 };
 
 const App: React.FC = () => {
+  const { theme } = useContext(Theme);
+
   const [address, setAddress] = useState("");
   const [alert, setAlert] = useState("");
   const [prev, setPrev] = useState("");
@@ -155,36 +159,37 @@ const App: React.FC = () => {
   }, [state.trace]);
 
   return (
-    <div className="p-2 align-items-center" style={{ background, padding: "2%", minHeight: "100vh" }}>
-      <Alert visible={!!alert} message={alert} />
+    <>
+      <PatternSection />
+      <div className={cx("p-2 align-items-center", theme)} style={{ minHeight: "100vh" }}>
+        <Alert visible={!!alert} message={alert} />
 
-      <SearchSection action={handleKeyPress} title="Bitgodine Tracing" placeholder="Address" set={setAddress} />
-      {status == "loading" ? (
-        <Spinner
-          style={{ width: "4rem", height: "4rem", left: "45%" }}
-          className="noUi-value"
-          type="grow"
-          color="info"
-        />
-      ) : graph?.nodes?.length ?? false ? (
-        <>
-          <label
-            className="custom-toggle"
-            style={{ position: "absolute", zIndex: 10, right: "2rem", marginTop: sectionPatternMargin }}>
-            <input type="checkbox" onClick={(): void => setPhysics(!physics)} />
-            <span className="custom-toggle-slider rounded-circle bg-default" />
-            <span style={{ color: "white", position: "absolute", top: "2rem" }}>Gravity</span>
-          </label>
-          <Network
-            graph={graph}
-            physics={physics}
-            style={{ marginTop: sectionPatternMargin, borderWidth: 1, borderColor: bitcoin }}
+        <SearchSection action={handleKeyPress} title="Bitgodine Tracing" placeholder="Address" set={setAddress} />
+        {status == "loading" ? (
+          <Spinner
+            style={{ width: "4rem", height: "4rem", left: "45%" }}
+            className="noUi-value"
+            type="grow"
+            color="info"
           />
-        </>
-      ) : (
-        false
-      )}
-    </div>
+        ) : graph?.nodes?.length ?? false ? (
+          <>
+            <label className="custom-toggle position-absolute header-margin mr-5 z10">
+              <input type="checkbox" onClick={(): void => setPhysics(!physics)} />
+              <span className={cx("custom-toggle-slider rounded-circle", theme)} />
+              <span className="text-white position-absolute top-5">Gravity</span>
+            </label>
+            <Network
+              graph={graph}
+              physics={physics}
+              style={{ marginTop: sectionPatternMargin, borderWidth: 1, borderColor: bitcoin }}
+            />
+          </>
+        ) : (
+          false
+        )}
+      </div>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import { Col, Container, Row, Spinner, UncontrolledAlert } from "reactstrap";
 import useFetch from "use-http";
 import { endpoint } from "constants/config";
 import SearchSection from "components/SearchSection";
+import PatternSection from "components/layout/PatternSection";
 
 interface Trace {
   txid: string;
@@ -131,39 +132,42 @@ const Clusters: React.FC = () => {
   }, [responseData]);
 
   return (
-    <div className="p-2 align-items-center" style={{ background, padding: "2%", minHeight: "100vh" }}>
-      {error && (
-        <UncontrolledAlert
-          color="danger"
-          className="align-items-center"
-          style={{
-            position: "absolute",
-            width: "90%",
-            bottom: 0,
-            zIndex: 1200,
-            left: 0,
-            right: 0,
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}>
-          {error}
-        </UncontrolledAlert>
-      )}
+    <>
+      <PatternSection />
+      <div className="p-2 align-items-center" style={{ background, padding: "2%", minHeight: "100vh" }}>
+        {error && (
+          <UncontrolledAlert
+            color="danger"
+            className="align-items-center"
+            style={{
+              position: "absolute",
+              width: "90%",
+              bottom: 0,
+              zIndex: 1200,
+              left: 0,
+              right: 0,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}>
+            {error}
+          </UncontrolledAlert>
+        )}
 
-      <SearchSection action={handleKeyPress} title="Bitgodine Clustering" placeholder="Address" set={setAddress} />
-      {request.loading ? (
-        <Spinner
-          style={{ width: "4rem", height: "4rem", left: "45%" }}
-          className="noUi-value"
-          type="grow"
-          color="info"
-        />
-      ) : data?.nodes?.length ?? false ? (
-        <Network graph={data} />
-      ) : (
-        false
-      )}
-    </div>
+        <SearchSection action={handleKeyPress} title="Bitgodine Clustering" placeholder="Address" set={setAddress} />
+        {request.loading ? (
+          <Spinner
+            style={{ width: "4rem", height: "4rem", left: "45%" }}
+            className="noUi-value"
+            type="grow"
+            color="info"
+          />
+        ) : data?.nodes?.length ?? false ? (
+          <Network graph={data} />
+        ) : (
+          false
+        )}
+      </div>
+    </>
   );
 };
 

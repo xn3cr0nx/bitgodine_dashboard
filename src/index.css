@@ -17,5 +17,131 @@ code {
 }
 
 .text-sm {
-  font-size: 0.75rem;
+  font-size: 0.75rem !important;
+}
+
+.bg-transparent {
+  background-color: transparent !important;
+}
+
+.header-margin {
+  margin-top: 10rem !important;
+}
+
+.pointer {
+  cursor: pointer !important;
+}
+
+/* z-index properties */
+.z-0 {
+  z-index: 0 !important;
+}
+
+.z-5 {
+  z-index: 5 !important;
+}
+
+.z-10 {
+  z-index: 10 !important;
+}
+
+.z-15 {
+  z-index: 15 !important;
+}
+
+.z-100 {
+  z-index: 100 !important;
+}
+
+/* fill properties */
+.fill-primary {
+  fill: #5e72e4 !important;
+}
+.fill-secondary {
+  fill: #f4f5f7 !important;
+}
+.fill-success {
+  fill: #2dce89 !important;
+}
+.fill-info {
+  fill: #11cdef !important;
+}
+.fill-warning {
+  fill: #fb6340 !important;
+}
+.fill-danger {
+  fill: #f5365c !important;
+}
+.fill-light {
+  fill: #adb5bd !important;
+}
+.fill-lighter {
+  fill: #e9ecef !important;
+}
+.fill-dark {
+  fill: #212529 !important;
+}
+.fill-darker {
+  fill: blackimportant;
+}
+.fill-default {
+  fill: #172b4d !important;
+}
+.fill-white {
+  fill: #fff !important;
+}
+.fill-neutral {
+  fill: #fff !important;
+}
+.fill-blue {
+  fill: #5e72e4 !important;
+}
+.fill-indigo {
+  fill: #5603ad !important;
+}
+.fill-purple {
+  fill: #8965e0 !important;
+}
+.fill-pink {
+  fill: #f3a4b5 !important;
+}
+.fill-red {
+  fill: #f5365c !important;
+}
+.fill-orange {
+  fill: #fb6340 !important;
+}
+.fill-yellow {
+  fill: #ffd600 !important;
+}
+
+#header-shape-gradient {
+  --color-stop: #2dce89;
+  --color-bot: #2dcecc;
+}
+.fill-green {
+  /* fill: #2dce89 !important; */
+  fill: url(#header-shape-gradient) #2dce89;
+}
+.fill-teal {
+  fill: #11cdef !important;
+}
+.fill-cyan {
+  fill: #2bffc6 !important;
+}
+.fill-gray {
+  fill: #8898aa !important;
+}
+.fill-gray-dark {
+  fill: #32325d !important;
+}
+
+/* shine effect */
+.shine {
+  box-shadow: 0;
+  transition: box-shadow 0.5s;
+}
+
+.shine:hover {
+  box-shadow: 0 0 5px #515151;
 }
