@@ -194,7 +194,7 @@ const Header: React.FC = () => {
             </NavItem>
             <NavItem className="d-none d-lg-block ml-lg-4">
               <Button
-                className="btn-neutral btn-icon"
+                className={cx("btn-neutral btn-icon")}
                 color="default"
                 href="https://www.creative-tim.com/product/argon-design-system-react?ref=adsr-navbar"
                 target="_blank">
@@ -210,8 +210,5 @@ const Header: React.FC = () => {
     </Navbar>
   );
 };
-{
-  /*</header>*/
-}
 
 export default Header;

@@ -1,15 +1,16 @@
 import cx from "classnames";
-import Network, { Edge, Graph, Node } from "components/Graph";
+import Network, { Edge, Event, Events, Graph, Hover, Node } from "components/Graph";
 import PatternSection from "components/layout/PatternSection";
 import SearchSection from "components/SearchSection";
 import Alert from "components/styled/Alert";
-import { bitcoin } from "constants/colors";
 import { endpoint } from "constants/config";
-import { sectionPatternMargin } from "constants/variables";
 import { Store, Theme } from "context";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Spinner } from "reactstrap";
+import { Card, CardBody, CardHeader, Spinner } from "reactstrap";
+import { StringParam, useQueryParam } from "use-query-params";
+import { danger, warning, success } from "constants/colors";
+import { useScrollPosition } from "@n8tb1t/use-scroll-position";
 
 interface Trace {
   txid: string;
@@ -24,6 +25,60 @@ interface Next {
   weight?: number;
 }
 
+interface HoverCardProps {
+  trace: Trace;
+}
+
+const HoverCard: React.FC<HoverCardProps> = ({ trace }) => {
+  const { theme } = useContext(Theme);
+  const [details, setDetails] = useState(false);
+
+  const styles = useMemo(() => {
+    return {
+      div: "flex flex-row w-100 mb-3",
+      label: "text-sm font-weight-normal mb-0 mr-3 flex-fill text-uppercase",
+      detail: "text-sm mb-0 flex flex-nowrap text-break",
+    };
+  }, [theme]);
+
+  return (
+    <Card className="position-fixed top-0 text-sm text-nowrap z-10 top-3">
+      <CardHeader className={cx("py-2 flex flex-row border-bottom rounded-bottom")}>{trace.txid}</CardHeader>
+      <CardBody className={cx("py-2 flex flex-column rounded-bottom")}>
+        {trace?.next.map(next => {
+          return (
+            <Card className={cx("shadow-lg border-0 mb-3 text-white", theme)}>
+              <CardHeader className={cx("py-2 border-bottom rounded-bottom flex justify-content-between", theme)}>
+                <p className="text-sm mr-3">{`${next.txid}:${next.vout}`}</p>
+                <label className="custom-toggle">
+                  <input type="checkbox" onClick={(): void => setDetails(!details)} />
+                  <span className={cx("custom-toggle-slider rounded-circle", theme)} />
+                </label>
+              </CardHeader>
+              {details && (
+                <CardBody className={cx("py-2 flex flex-column rounded-bottom", theme)}>
+                  <div className={styles.div}>
+                    <p className={styles.label}>Receiver</p>
+                    <p className={styles.detail}>{next.receiver}</p>
+                  </div>
+                  <div className={styles.div}>
+                    <p className={styles.label}>Weight</p>
+                    <p className={styles.detail}>{next.weight}</p>
+                  </div>
+                  <div className={styles.div}>
+                    <p className={styles.label}>Amount</p>
+                    <p className={styles.detail}>{next.amount}</p>
+                  </div>
+                </CardBody>
+              )}
+            </Card>
+          );
+        })}
+      </CardBody>
+    </Card>
+  );
+};
+
 const fetchSearch = async (url: string): Promise<Response> => {
   return await fetch(url);
 };
@@ -31,30 +86,52 @@ const fetchSearch = async (url: string): Promise<Response> => {
 const App: React.FC = () => {
   const { theme } = useContext(Theme);
 
-  const [address, setAddress] = useState("");
+  const [search, setSearch] = useState("");
   const [alert, setAlert] = useState("");
   const [prev, setPrev] = useState("");
-  const [physics, setPhysics] = useState(false);
+  const [hovered, setHovered] = useState<number | undefined>(undefined);
+  const [selected, setSelected] = useState<number | undefined>(undefined);
   const { state, dispatch } = useContext(Store);
   const [mutate, { status, data, error }] = useMutation(fetchSearch);
+  const [address, setAddress] = useQueryParam("addr", StringParam);
+  const [y, setY] = useState(0);
+
+  useScrollPosition(event => {
+    setY(event.currPos.y);
+  });
+
+  const yBoundary = -600;
+
+  useEffect(() => {
+    if (selected != undefined && y > yBoundary) setSelected(undefined);
+  }, [y]);
 
   const handleKeyPress = async (event: React.KeyboardEvent<Element>): Promise<void> => {
-    if (event.key === "Enter" && address) {
+    if (event.key === "Enter" && search) {
       try {
-        if (prev !== address) {
+        if (prev !== search) {
           if (state.trace) {
             dispatch({
               type: "RESET_TRACE",
             });
           }
-          await mutate(endpoint.concat("trace/address/" + address));
-          setPrev(address);
+          setAddress(search);
+          setPrev(search);
         }
       } catch (error) {
         console.log("ERROR", error);
       }
     }
   };
+
+  useEffect(() => {
+    if (address) {
+      (async (): Promise<void> => {
+        await mutate(endpoint + "trace/address/" + address);
+        window.scrollTo(0, 0);
+      })();
+    }
+  }, [address]);
 
   useEffect(() => {
     (async (): Promise<void> => {
@@ -97,7 +174,7 @@ const App: React.FC = () => {
     const node: Node = {
       id: index,
       label: trace.txid,
-      title: JSON.stringify(state.trace.traces[trace.txid]),
+      // title: JSON.stringify(state.trace.traces[trace.txid]),
     };
     nodes.push(node);
 
@@ -105,7 +182,8 @@ const App: React.FC = () => {
       const edge: Edge = {
         from: prev,
         to: index,
-        label: JSON.stringify(weight),
+        // label: JSON.stringify(weight),
+        color: (weight as number) > 85 ? success : (weight as number) > 65 ? warning : danger,
       };
       edges.push(edge);
     }
@@ -158,13 +236,39 @@ const App: React.FC = () => {
     return graph;
   }, [state.trace]);
 
+  const nodesMap = useMemo((): any => {
+    if (!graph?.nodes) return {};
+    return graph.nodes.reduce((acc: any, curr: Node) => {
+      if (!acc[curr.id]) acc[curr.id] = curr.label;
+      return acc;
+    }, {});
+  }, [graph]);
+
+  const events: Events = {
+    click: (event: Event): void => {
+      if (selected != undefined && !event.nodes) setSelected(undefined);
+    },
+    doubleClick: (event: Event): void => {
+      console.log("DOBULE CLICK", event);
+    },
+    select: (event: Event): void => {
+      if (y < yBoundary) setSelected(event.nodes[0]);
+    },
+    hoverNode: (event: Hover): void => {
+      if (y < yBoundary) setHovered(event.node);
+    },
+    blurNode: (event: Hover): void => {
+      setHovered(undefined);
+    },
+  };
+
   return (
     <>
       <PatternSection />
       <div className={cx("p-2 align-items-center", theme)} style={{ minHeight: "100vh" }}>
         <Alert visible={!!alert} message={alert} />
 
-        <SearchSection action={handleKeyPress} title="Bitgodine Tracing" placeholder="Address" set={setAddress} />
+        <SearchSection action={handleKeyPress} title="Bitgodine Tracing" placeholder="Address" set={setSearch} />
         {status == "loading" ? (
           <Spinner
             style={{ width: "4rem", height: "4rem", left: "45%" }}
@@ -174,16 +278,14 @@ const App: React.FC = () => {
           />
         ) : graph?.nodes?.length ?? false ? (
           <>
-            <label className="custom-toggle position-absolute header-margin mr-5 z10">
-              <input type="checkbox" onClick={(): void => setPhysics(!physics)} />
-              <span className={cx("custom-toggle-slider rounded-circle", theme)} />
-              <span className="text-white position-absolute top-5">Gravity</span>
-            </label>
-            <Network
-              graph={graph}
-              physics={physics}
-              style={{ marginTop: sectionPatternMargin, borderWidth: 1, borderColor: bitcoin }}
-            />
+            <Network graph={graph} events={events} style={{ marginTop: "8rem" }} />
+            {hovered != undefined ? (
+              <HoverCard trace={state?.trace?.traces[nodesMap[hovered]]} />
+            ) : selected != undefined ? (
+              <HoverCard trace={state?.trace?.traces[nodesMap[selected]]} />
+            ) : (
+              false
+            )}
           </>
         ) : (
           false

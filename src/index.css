@@ -145,3 +145,24 @@ code {
 .shine:hover {
   box-shadow: 0 0 5px #515151;
 }
+
+/* fadein effect */
+.fade {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.fade:hover {
+  opacity: 1;
+}
+
+/* custom-toggle */
+.custom-toggle input:checked + .custom-toggle-slider {
+  /* border: 1px solid #172b4d; */
+  border: 1px solid #e9ecef;
+}
+.custom-toggle input:checked + .custom-toggle-slider:before {
+  /* background: #172b4d; */
+  background: #e9ecef;
+  transform: translateX(1.625rem);
+}

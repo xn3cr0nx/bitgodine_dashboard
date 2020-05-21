@@ -1,17 +1,20 @@
-import React, { useContext } from "react";
-import { bitcoin, background, go } from "constants/colors";
 import cx from "classnames";
+import { background, bitcoin, go } from "constants/colors";
+import { laptop } from "constants/media";
 import { Theme } from "context";
+import React, { useContext } from "react";
+import { useWindowSize } from "react-recipes";
 
 export default function PatternSection() {
   const { theme } = useContext(Theme);
+  const { width } = useWindowSize();
 
   return (
     <section
       className="section section-lg section-shaped pb-0 pt-0 position-absolute t-0 w-100"
-      style={{ height: "60vh" }}>
+      style={{ height: width > laptop ? "60vh" : "80vh" }}>
       <div
-        className={cx("shape shape-style-1 shape-primary", theme)}
+        className={cx("shape shape-style-1 shape-primary")}
         style={{
           position: "unset",
           background: `linear-gradient(150deg, ${bitcoin} 20%, ${go}80 70%, ${background} 95%)`,

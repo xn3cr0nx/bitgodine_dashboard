@@ -78,7 +78,7 @@ const Clusters: React.FC = () => {
             const node: Node = {
               id: i,
               label: f.txid,
-              title: JSON.stringify(f),
+              // title: JSON.stringify(f),
             };
             graph.nodes.push(node);
             if (i > 0) {
@@ -113,7 +113,7 @@ const Clusters: React.FC = () => {
           const node: Node = {
             id: i,
             label: f.txid,
-            title: JSON.stringify(f),
+            // title: JSON.stringify(f),
           };
           graph.nodes.push(node);
           if (i > 0) {
