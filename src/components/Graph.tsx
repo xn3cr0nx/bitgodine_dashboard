@@ -21,6 +21,7 @@ export interface Node {
   id: id;
   label: string;
   group?: number;
+  mass?: number;
 }
 
 export interface Edge {
@@ -118,14 +119,16 @@ export interface Props {
 
 const Network: React.FC<Props> = ({ graph, events, style }) => {
   const { theme } = useContext(Theme);
-  const [physics, setPhysics] = useState(false);
-  const [labels, setLabels] = useState(true);
+  const [physics, setPhysics] = useState(true);
   const [hierarchy, setHierarchy] = useState(false);
 
   const options = useMemo(
     () => ({
       layout: {
-        hierarchical: hierarchy,
+        hierarchical: {
+          enabled: hierarchy,
+          direction: "UD",
+        },
       },
       nodes: {
         shape: "dot",
@@ -168,26 +171,26 @@ const Network: React.FC<Props> = ({ graph, events, style }) => {
       },
       height: "1000px",
     }),
-    [physics, hierarchy, labels],
+    [physics, hierarchy],
   );
 
   const Controls = (
     <Card className="py-4 px-4 flex flex-row position-absolute mt-8 right-5 z-10">
       <label className="custom-toggle mr-4">
-        <input type="checkbox" onClick={(): void => setPhysics(!physics)} />
+        <input type="checkbox" defaultChecked={physics} onClick={(): void => setPhysics(!physics)} />
         <span className={cx("custom-toggle-slider rounded-circle", theme)} />
         <span className="position-absolute top-4">Gravity</span>
       </label>
-      <label className="custom-toggle mr-4">
-        <input type="checkbox" onClick={(): void => setHierarchy(!hierarchy)} />
+      <label className="custom-toggle">
+        <input type="checkbox" defaultChecked={hierarchy} onClick={(): void => setHierarchy(!hierarchy)} />
         <span className={cx("custom-toggle-slider rounded-circle", theme)} />
         <span className="position-absolute top-4">Hierarchy</span>
       </label>
-      <label className="custom-toggle">
-        <input type="checkbox" onClick={(): void => setLabels(!labels)} />
+      {/*<label className="custom-toggle">
+        <input type="checkbox" defaultChecked={labels} onClick={(): void => setLabels(!labels)} />
         <span className={cx("custom-toggle-slider rounded-circle", theme)} />
         <span className="position-absolute top-4">Labels</span>
-      </label>
+  </label>*/}
     </Card>
   );
 
@@ -198,9 +201,10 @@ const Network: React.FC<Props> = ({ graph, events, style }) => {
         graph={graph}
         options={options}
         events={events}
-        // getNetwork={network => {
-        //   //  if you want access to vis.js network api you can set the state in a parent component using this property
-        // }}
+        getNetwork={(network: any): void => {
+          //  if you want access to vis.js network api you can set the state in a parent component using this property
+          console.log("GOT THE NETWORK", network);
+        }}
         style={{ background: "transparent", ...style }}
       />
     </>

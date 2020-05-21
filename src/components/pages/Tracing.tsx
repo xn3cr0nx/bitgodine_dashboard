@@ -43,14 +43,18 @@ const HoverCard: React.FC<HoverCardProps> = ({ trace }) => {
 
   return (
     <Card className="position-fixed top-0 text-sm text-nowrap z-10 top-3">
-      <CardHeader className={cx("py-2 flex flex-row border-bottom rounded-bottom")}>{trace.txid}</CardHeader>
+      <CardHeader className="text-dark flex justify-content-between">{trace.txid}</CardHeader>
       <CardBody className={cx("py-2 flex flex-column rounded-bottom")}>
         {trace?.next.map(next => {
           return (
             <Card className={cx("shadow-lg border-0 mb-3 text-white", theme)}>
-              <CardHeader className={cx("py-2 border-bottom rounded-bottom flex justify-content-between", theme)}>
-                <p className="text-sm mr-3">{`${next.txid}:${next.vout}`}</p>
-                <label className="custom-toggle">
+              <CardHeader
+                className={cx(
+                  "py-2 border-bottom rounded-bottom flex justify-content-between align-items-center",
+                  theme,
+                )}>
+                <p className="text-sm mr-3 mb-0">{`${next.txid}:${next.vout}`}</p>
+                <label className="custom-toggle mb-0">
                   <input type="checkbox" onClick={(): void => setDetails(!details)} />
                   <span className={cx("custom-toggle-slider rounded-circle", theme)} />
                 </label>
@@ -93,14 +97,14 @@ const App: React.FC = () => {
   const [selected, setSelected] = useState<number | undefined>(undefined);
   const { state, dispatch } = useContext(Store);
   const [mutate, { status, data, error }] = useMutation(fetchSearch);
-  const [address, setAddress] = useQueryParam("addr", StringParam);
+  const [address, setAddress] = useQueryParam("address", StringParam);
   const [y, setY] = useState(0);
 
   useScrollPosition(event => {
     setY(event.currPos.y);
   });
 
-  const yBoundary = -600;
+  const yBoundary = -500;
 
   useEffect(() => {
     if (selected != undefined && y > yBoundary) setSelected(undefined);
@@ -128,7 +132,7 @@ const App: React.FC = () => {
     if (address) {
       (async (): Promise<void> => {
         await mutate(endpoint + "trace/address/" + address);
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
       })();
     }
   }, [address]);
@@ -174,7 +178,7 @@ const App: React.FC = () => {
     const node: Node = {
       id: index,
       label: trace.txid,
-      // title: JSON.stringify(state.trace.traces[trace.txid]),
+      mass: 3,
     };
     nodes.push(node);
 
@@ -182,7 +186,6 @@ const App: React.FC = () => {
       const edge: Edge = {
         from: prev,
         to: index,
-        // label: JSON.stringify(weight),
         color: (weight as number) > 85 ? success : (weight as number) > 65 ? warning : danger,
       };
       edges.push(edge);
