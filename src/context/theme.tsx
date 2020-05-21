@@ -56,7 +56,8 @@ export enum Themes {
 
 type ThemeState = Themes;
 
-const initialTheme: ThemeState = Themes.GREEN;
+const storedTheme = localStorage.getItem("theme");
+const initialTheme: ThemeState = (storedTheme as Themes) ?? Themes.DEFAULT;
 
 export const Theme = createContext<any>(initialTheme);
 

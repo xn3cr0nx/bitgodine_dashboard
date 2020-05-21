@@ -4,12 +4,14 @@ import { Theme as T } from "context";
 import { Themes } from "context/theme";
 import { Container, Card, CardHeader, CardBody } from "reactstrap";
 import ThemeButton from "components/styled/ThemeButton";
+import { writeStorage } from "@rehooks/local-storage";
 
 const Theme: React.FC = () => {
   const { theme, dispatch } = useContext(T);
 
   const changeTheme = (t: Themes): void => {
     dispatch({ type: "THEME", payload: t });
+    writeStorage("theme", t);
   };
 
   return (
