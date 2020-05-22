@@ -15,29 +15,31 @@ const Theme: React.FC = () => {
   };
 
   return (
-    <Container className="p-3">
-      <Card>
-        <CardHeader className={cx("h2", theme.bg, theme.text)}>Theme</CardHeader>
-        <CardBody
-          className="p-2 align-items-center"
-          style={{
-            display: "grid",
-            gridGap: "5px",
-            gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 1fr))",
-            gridAutoRows: "1fr",
-          }}>
-          {Object.keys(Background).map(t => {
-            return (
-              <ThemeButton
-                key={t}
-                onClick={(): void => changeTheme((Background as any)[t])}
-                theme={(Background as any)[t]}
-              />
-            );
-          })}
-        </CardBody>
-      </Card>
-    </Container>
+    <div className={cx(theme.bg)}>
+      <Container className="p-3">
+        <Card>
+          <CardHeader className={cx("h2", theme.bg, theme.text)}>Theme</CardHeader>
+          <CardBody
+            className="p-2 align-items-center"
+            style={{
+              display: "grid",
+              gridGap: "5px",
+              gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 1fr))",
+              gridAutoRows: "1fr",
+            }}>
+            {Object.keys(Background).map(t => {
+              return (
+                <ThemeButton
+                  key={t}
+                  onClick={(): void => changeTheme((Background as any)[t])}
+                  theme={(Background as any)[t]}
+                />
+              );
+            })}
+          </CardBody>
+        </Card>
+      </Container>
+    </div>
   );
 };
 

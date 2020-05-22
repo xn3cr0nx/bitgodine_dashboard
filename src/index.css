@@ -53,6 +53,52 @@ code {
   z-index: 100 !important;
 }
 
+/* shine effect */
+.shine {
+  box-shadow: 0;
+  transition: box-shadow 0.5s;
+}
+
+.shine:hover {
+  box-shadow: 0 0 5px #515151;
+}
+
+/* fadein effect */
+.fade {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.fade:hover {
+  opacity: 1;
+}
+
+/* custom-toggle */
+.custom-toggle input:checked + .custom-toggle-slider {
+  /* border: 1px solid #172b4d; */
+  border: 1px solid #e9ecef;
+}
+.custom-toggle input:checked + .custom-toggle-slider:before {
+  /* background: #172b4d; */
+  background: #e9ecef;
+  transform: translateX(1.625rem);
+}
+
+.footer.has-cards:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10rem;
+  height: 2000px;
+  background: #f4f5f7;
+  transform: skew(0, -6deg);
+}
+
+.navbar-nav .dropdown-menu:before {
+  display: none;
+}
+
 /* fill properties */
 .fill-primary {
   fill: #5e72e4 !important;
@@ -136,33 +182,358 @@ code {
   fill: #32325d !important;
 }
 
-/* shine effect */
-.shine {
-  box-shadow: 0;
-  transition: box-shadow 0.5s;
+/* gradient backgrounds */
+.footer-gradient-primary {
+  background: linear-gradient(150deg, #5e72e4 0, #825ee4 100%) !important;
 }
 
-.shine:hover {
-  box-shadow: 0 0 5px #515151;
+.footer-gradient-secondary {
+  background: linear-gradient(150deg, #f4f5f7 0, #f4f4f7 100%) !important;
 }
 
-/* fadein effect */
-.fade {
-  opacity: 0;
-  transition: opacity 0.5s;
+.footer-gradient-success {
+  background: linear-gradient(150deg, #2dce89 0, #2dcecc 100%) !important;
 }
 
-.fade:hover {
-  opacity: 1;
+.footer-gradient-info {
+  background: linear-gradient(150deg, #11cdef 0, #1171ef 100%) !important;
 }
 
-/* custom-toggle */
-.custom-toggle input:checked + .custom-toggle-slider {
-  /* border: 1px solid #172b4d; */
-  border: 1px solid #e9ecef;
+.footer-gradient-warning {
+  background: linear-gradient(150deg, #fb6340 0, #fbb140 100%) !important;
 }
-.custom-toggle input:checked + .custom-toggle-slider:before {
-  /* background: #172b4d; */
-  background: #e9ecef;
-  transform: translateX(1.625rem);
+
+.footer-gradient-danger {
+  background: linear-gradient(150deg, #f5365c 0, #f56036 100%) !important;
+}
+
+.footer-gradient-light {
+  background: linear-gradient(150deg, #adb5bd 0, #adaebd 100%) !important;
+}
+
+.footer-gradient-dark {
+  background: linear-gradient(150deg, #212529 0, #212229 100%) !important;
+}
+
+.footer-gradient-default {
+  background: linear-gradient(150deg, #172b4d 0, #1a174d 100%) !important;
+}
+
+.footer-gradient-white {
+  background: linear-gradient(150deg, #fff 0, white 100%) !important;
+}
+
+.footer-gradient-neutral {
+  background: linear-gradient(150deg, #fff 0, white 100%) !important;
+}
+
+.footer-gradient-darker {
+  background: linear-gradient(150deg, black 0, black 100%) !important;
+}
+
+.footer-gradient-blue {
+  background: linear-gradient(150deg, #5e72e4 0, #825ee4 100%) !important;
+}
+
+.footer-gradient-indigo {
+  background: linear-gradient(150deg, #5603ad 0, #9d03ad 100%) !important;
+}
+
+.footer-gradient-purple {
+  background: linear-gradient(150deg, #8965e0 0, #bc65e0 100%) !important;
+}
+
+.footer-gradient-pink {
+  background: linear-gradient(150deg, #f3a4b5 0, #f3b4a4 100%) !important;
+}
+
+.footer-gradient-red {
+  background: linear-gradient(150deg, #f5365c 0, #f56036 100%) !important;
+}
+
+.footer-gradient-orange {
+  background: linear-gradient(150deg, #fb6340 0, #fbb140 100%) !important;
+}
+
+.footer-gradient-yellow {
+  background: linear-gradient(150deg, #ffd600 0, #beff00 100%) !important;
+}
+
+.footer-gradient-green {
+  background: linear-gradient(150deg, #2dce89 0, #2dcecc 100%) !important;
+}
+
+.footer-gradient-teal {
+  background: linear-gradient(150deg, #11cdef 0, #1171ef 100%) !important;
+}
+
+.footer-gradient-cyan {
+  background: linear-gradient(150deg, #2bffc6 0, #2be0ff 100%) !important;
+}
+
+.footer-gradient-white {
+  background: linear-gradient(150deg, #fff 0, white 100%) !important;
+}
+
+.footer-gradient-gray {
+  background: linear-gradient(150deg, #8898aa 0, #888aaa 100%) !important;
+}
+
+.footer-gradient-gray-dark {
+  background: linear-gradient(150deg, #32325d 0, #44325d 100%) !important;
+}
+
+.footer-gradient-light {
+  background: linear-gradient(150deg, #ced4da 0, #cecfda 100%) !important;
+}
+
+.footer-gradient-lighter {
+  background: linear-gradient(150deg, #e9ecef 0, #e9eaef 100%) !important;
+}
+
+/* secondary color */
+
+.bg-secondary-primary {
+  background: #825ee4 !important;
+}
+.hover-primary:hover {
+  background: #825ee4 !important;
+}
+.secondary-primary {
+  color: #825ee4 !important;
+}
+
+.bg-secondary-secondary {
+  background: #f4f4f7 !important;
+}
+.hover-secondary:hover {
+  background: #f4f4f7 !important;
+}
+.secondary-secondary {
+  color: #f4f4f7 !important;
+}
+
+.bg-secondary-success {
+  background: #2dcecc !important;
+}
+.hover-success:hover {
+  background: #2dcecc !important;
+}
+.secondary-success {
+  color: #2dcecc !important;
+}
+
+.bg-secondary-info {
+  background: #1171ef !important;
+}
+.hover-info:hover {
+  background: #1171ef !important;
+}
+.secondary-info {
+  color: #1171ef !important;
+}
+
+.bg-secondary-warning {
+  background: #fbb140 !important;
+}
+.hover-warning:hover {
+  background: #fbb140 !important;
+}
+.secondary-warning {
+  color: #fbb140 !important;
+}
+
+.bg-secondary-danger {
+  background: #f56036 !important;
+}
+.hover-danger:hover {
+  background: #f56036 !important;
+}
+.secondary-danger {
+  color: #f56036 !important;
+}
+
+.bg-secondary-light {
+  background: #adaebd !important;
+}
+.hover-light:hover {
+  background: #adaebd !important;
+}
+.secondary-light {
+  color: #adaebd !important;
+}
+
+.bg-secondary-dark {
+  background: #212229 !important;
+}
+.hover-dark:hover {
+  background: #212229 !important;
+}
+.secondary-dark {
+  color: #212229 !important;
+}
+
+.bg-secondary-default {
+  background: #1a174d !important;
+}
+.hover-default:hover {
+  background: #1a174d !important;
+}
+.secondary-default {
+  color: #1a174d !important;
+}
+
+.bg-secondary-white {
+  background: white !important;
+}
+.hover-white:hover {
+  background: white !important;
+}
+.secondary-white {
+  color: white !important;
+}
+
+.bg-secondary-neutral {
+  background: white !important;
+}
+.hover-neutral:hover {
+  background: white !important;
+}
+.secondary-neutral {
+  color: white !important;
+}
+
+.bg-secondary-darker {
+  background: black !important;
+}
+.hover-darker:hover {
+  background: black !important;
+}
+.secondary-darker {
+  color: black !important;
+}
+
+.bg-secondary-blue {
+  background: #825ee4 !important;
+}
+.hover-blue:hover {
+  background: #825ee4 !important;
+}
+.secondary-blue {
+  color: #825ee4 !important;
+}
+
+.bg-secondary-indigo {
+  background: #9d03ad !important;
+}
+.hover-indigo:hover {
+  background: #9d03ad !important;
+}
+.secondary-indigo {
+  color: #9d03ad !important;
+}
+
+.bg-secondary-purple {
+  background: #bc65e0 !important;
+}
+.hover-purple:hover {
+  background: #bc65e0 !important;
+}
+.secondary-purple {
+  color: #bc65e0 !important;
+}
+
+.bg-secondary-pink {
+  background: #f3b4a4 !important;
+}
+.hover-pink:hover {
+  background: #f3b4a4 !important;
+}
+.secondary-pink {
+  color: #f3b4a4 !important;
+}
+
+.bg-secondary-red {
+  background: #f56036 !important;
+}
+.hover-red:hover {
+  background: #f56036 !important;
+}
+.secondary-red {
+  color: #f56036 !important;
+}
+
+.bg-secondary-orange {
+  background: #fbb140 !important;
+}
+.hover-orange:hover {
+  background: #fbb140 !important;
+}
+.secondary-orange {
+  color: #fbb140 !important;
+}
+
+.bg-secondary-yellow {
+  background: #beff00 !important;
+}
+.hover-yellow:hover {
+  background: #beff00 !important;
+}
+.secondary-yellow {
+  color: #beff00 !important;
+}
+
+.bg-secondary-green {
+  background: #2dcecc !important;
+}
+.hover-green:hover {
+  background: #2dcecc !important;
+}
+.secondary-green {
+  color: #2dcecc !important;
+}
+
+.bg-secondary-teal {
+  background: #1171ef !important;
+}
+.hover-teal:hover {
+  background: #1171ef !important;
+}
+.secondary-teal {
+  color: #1171ef !important;
+}
+
+.footer-gradient-cyan {
+  background: #2be0ff !important;
+  color: #2be0ff !important;
+}
+
+.footer-gradient-white {
+  background: white !important;
+  color: white !important;
+}
+
+.footer-gradient-gray {
+  background: #888aaa !important;
+  color: #888aaa !important;
+}
+
+.footer-gradient-gray-dark {
+  background: #44325d !important;
+  color: #44325d !important;
+}
+
+.footer-gradient-light {
+  background: #cecfda !important;
+  color: #cecfda !important;
+}
+
+.footer-gradient-lighter {
+  background: #e9eaef !important;
+  color: #e9eaef !important;
+}
+
+.bg-focus:hover {
+  background-color: aqua;
+  color-color: aqua;
 }

@@ -1,13 +1,20 @@
 /*eslint-disable*/
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Col, Container, Nav, NavItem, NavLink, Row, UncontrolledTooltip } from "reactstrap";
+import cx from "classnames";
+import { Theme } from "context";
 
 // style={{ position: "fixed", left: 0, bottom: 0, width: "100%", textAlign: "center" }}>
-const CardsFooter: React.FC = () => {
+const Footer: React.FC = () => {
+  const { theme } = useContext(Theme);
+
   return (
-    <footer className="footer has-cards" style={{ marginTop: "-460px" }}>
-      <Container>
-        <Row className="row-grid align-items-center my-md">
+    <footer
+      className={cx("footer has-cards mt-0 pt-0", theme.bg.replace("bg", "footer"))}
+      // style={{ marginTop: "-460px" }}
+      style={{ top: "9rem !important" }}>
+      <Container style={{ marginTop: "15rem" }}>
+        <Row className="row-grid align-items-center mt-0 my-md">
           <Col lg="6">
             <h3 className="text-default font-weight-light mb-2">Support us!</h3>
             <h4 className="mb-0 font-weight-light">Donate to keep open source development ongoing</h4>
@@ -115,4 +122,4 @@ const CardsFooter: React.FC = () => {
   );
 };
 
-export default CardsFooter;
+export default Footer;

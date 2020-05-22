@@ -105,12 +105,12 @@ const Login: React.FC = () => {
               </Card>
               <Row className="mt-3">
                 <Col xs="6">
-                  <a className="text-light" href="#pablo" onClick={e => e.preventDefault()}>
+                  <a className={cx("text-dark")} href="#pablo" onClick={e => e.preventDefault()}>
                     <small>Forgot password?</small>
                   </a>
                 </Col>
                 <Col className="text-right" xs="6">
-                  <Link className="text-light" to="/register">
+                  <Link className={cx("text-dark")} to="/register">
                     <small>Create new account</small>
                   </Link>
                 </Col>

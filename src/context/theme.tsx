@@ -44,14 +44,19 @@ interface State {
   text: Text;
 }
 
+const light = [
+  Background.YELLOW,
+  Background.CYAN,
+  Background.LIGHT,
+  Background.LIGHTER,
+  Background.SECONDARY,
+  Background.WHITE,
+];
+
 const storedTheme = localStorage.getItem("theme");
 const initialTheme: State = {
   bg: (storedTheme as Background) ?? Background.DEFAULT,
-  text:
-    storedTheme &&
-    [Background.LIGHT, Background.LIGHTER, Background.SECONDARY, Background.WHITE].includes(storedTheme as Background)
-      ? Text.DARK
-      : Text.WHITE,
+  text: storedTheme && light.includes(storedTheme as Background) ? Text.DARK : Text.WHITE,
 };
 
 export const Theme = createContext<any>(initialTheme);
@@ -67,8 +72,6 @@ function themeReducer(state: State = initialTheme, { type, payload }: ReducerAct
     case Background.INDIGO:
     case Background.PURPLE:
     case Background.PINK:
-    case Background.YELLOW:
-    case Background.CYAN:
     case Background.DARKER:
     case Background.DARK:
     case Background.DEFAULT:
@@ -77,6 +80,8 @@ function themeReducer(state: State = initialTheme, { type, payload }: ReducerAct
         bg: payload,
         text: Text.WHITE,
       };
+    case Background.YELLOW:
+    case Background.CYAN:
     case Background.LIGHT:
     case Background.LIGHTER:
     case Background.SECONDARY:

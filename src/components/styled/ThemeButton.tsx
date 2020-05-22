@@ -9,7 +9,7 @@ interface Props {
 const HoverButton: React.FC<Props> = ({ onClick, theme }) => {
   const [hover, setHover] = useState(false);
 
-  const lightBg = ["lighter", "secondary", "white"].some(t => theme.includes(t));
+  const lightBg = ["yellow", "cyan", "lighter", "secondary", "white"].some(t => theme.includes(t));
 
   return (
     <div
