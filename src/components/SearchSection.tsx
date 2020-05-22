@@ -1,5 +1,7 @@
+import cx from "classnames";
 import SearchBar from "components/SearchBar";
-import React from "react";
+import { Theme } from "context";
+import React, { useContext } from "react";
 import { Col, Container, Row } from "reactstrap";
 
 interface SearchProps {
@@ -10,6 +12,8 @@ interface SearchProps {
 }
 
 const SearchSection: React.FC<SearchProps> = ({ action, title, placeholder, set }) => {
+  const { theme } = useContext(Theme);
+
   return (
     <Container onKeyPress={action} style={{ marginBottom: "2rem" }}>
       <Row className="p-8 align-items-center">
@@ -22,7 +26,7 @@ const SearchSection: React.FC<SearchProps> = ({ action, title, placeholder, set 
           />
         </Col>
         <Col sm="6">
-          <h3 className="mb-0 font-weight-bold text-uppercase text-white">{title ?? "Bitgodine Explorer"}</h3>
+          <h3 className={cx("mb-0 font-weight-bold text-uppercase", theme.text)}>{title ?? "Bitgodine Explorer"}</h3>
         </Col>
       </Row>
       <Row>

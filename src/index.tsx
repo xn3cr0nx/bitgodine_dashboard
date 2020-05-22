@@ -6,6 +6,7 @@ import Header from "components/layout/Header";
 import Clusters from "components/pages/Clusters";
 import Theme from "components/pages/Theme";
 import Tracing from "components/pages/Tracing";
+import Login from "components/pages/Login";
 import { StoreProvider, ThemeProvider } from "context";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -15,40 +16,32 @@ import { QueryParamProvider } from "use-query-params";
 import App from "./App";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
+import Register from "components/pages/Register";
+import Profile from "components/pages/Profile";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StoreProvider>
     <ReactQueryDevtools initialIsOpen={false} />
-    <StoreProvider>
-      <ThemeProvider>
-        <BrowserRouter>
-          <QueryParamProvider ReactRouterRoute={Route}>
-            <Header />
+    <ThemeProvider>
+      <BrowserRouter>
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <Header />
 
-            <Switch>
-              <Route path="/" exact component={App} />
-              <Route path="/tracing" exact component={Tracing} />
-              <Route path="/clusters" exact component={Clusters} />
-              <Route path="/theme" exact component={Theme} />
-              {/*<Route path="/login-page" exact render={props => <Login {...props} />} />
-        <Route
-        path="/profile-page"
-        exact
-        render={props => <Profile {...props} />}
-        />
-        <Route
-        path="/register-page"
-        exact
-        render={props => <Register {...props} />}
-      />*/}
-              <Redirect to="/" />
-            </Switch>
-            <Footer />
-          </QueryParamProvider>
-        </BrowserRouter>
-      </ThemeProvider>
-    </StoreProvider>
-  </React.StrictMode>,
+          <Switch>
+            <Route path="/" exact component={App} />
+            <Route path="/tracing" exact component={Tracing} />
+            <Route path="/clusters" exact component={Clusters} />
+            <Route path="/theme" exact component={Theme} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/register" exact component={Register} />
+            <Route path="/profile" exact component={Profile} />
+            <Redirect to="/" />
+          </Switch>
+          <Footer />
+        </QueryParamProvider>
+      </BrowserRouter>
+    </ThemeProvider>
+  </StoreProvider>,
   document.getElementById("root"),
 );
 

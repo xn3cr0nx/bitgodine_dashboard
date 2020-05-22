@@ -45,22 +45,23 @@ const HoverCard: React.FC<HoverCardProps> = ({ trace }) => {
     <Card className="position-fixed top-0 text-sm text-nowrap z-10 top-3">
       <CardHeader className="text-dark flex justify-content-between">{trace.txid}</CardHeader>
       <CardBody className={cx("py-2 flex flex-column rounded-bottom")}>
-        {trace?.next.map(next => {
+        {trace?.next.map((next, k) => {
           return (
-            <Card className={cx("shadow-lg border-0 mb-3 text-white", theme)}>
+            <Card key={k} className={cx("shadow-lg border-0 mb-3", theme.bg, theme.text)}>
               <CardHeader
                 className={cx(
                   "py-2 border-bottom rounded-bottom flex justify-content-between align-items-center",
-                  theme,
+                  theme.bg,
+                  theme.text,
                 )}>
                 <p className="text-sm mr-3 mb-0">{`${next.txid}:${next.vout}`}</p>
                 <label className="custom-toggle mb-0">
                   <input type="checkbox" onClick={(): void => setDetails(!details)} />
-                  <span className={cx("custom-toggle-slider rounded-circle", theme)} />
+                  <span className={cx("custom-toggle-slider rounded-circle", theme.bg, theme.text)} />
                 </label>
               </CardHeader>
               {details && (
-                <CardBody className={cx("py-2 flex flex-column rounded-bottom", theme)}>
+                <CardBody className={cx("py-2 flex flex-column rounded-bottom", theme.bg, theme.text)}>
                   <div className={styles.div}>
                     <p className={styles.label}>Receiver</p>
                     <p className={styles.detail}>{next.receiver}</p>
@@ -247,12 +248,18 @@ const App: React.FC = () => {
     }, {});
   }, [graph]);
 
+  const isLeaf = (node: number): boolean => {
+    return !graph.edges.filter(edge => edge.from == node).length;
+  };
+
   const events: Events = {
     click: (event: Event): void => {
       if (selected != undefined && !event.nodes) setSelected(undefined);
     },
     doubleClick: (event: Event): void => {
-      console.log("DOBULE CLICK", event);
+      if (event?.nodes?.length && isLeaf(event.nodes[0])) {
+        console.log("DOBULE CLICK", event);
+      }
     },
     select: (event: Event): void => {
       if (y < yBoundary) setSelected(event.nodes[0]);
@@ -260,7 +267,7 @@ const App: React.FC = () => {
     hoverNode: (event: Hover): void => {
       if (y < yBoundary) setHovered(event.node);
     },
-    blurNode: (event: Hover): void => {
+    blurNode: (): void => {
       setHovered(undefined);
     },
   };
@@ -268,7 +275,7 @@ const App: React.FC = () => {
   return (
     <>
       <PatternSection />
-      <div className={cx("p-2 align-items-center", theme)} style={{ minHeight: "100vh" }}>
+      <div className={cx("p-2 align-items-center", theme.bg, theme.text)} style={{ minHeight: "100vh" }}>
         <Alert visible={!!alert} message={alert} />
 
         <SearchSection action={handleKeyPress} title="Bitgodine Tracing" placeholder="Address" set={setSearch} />

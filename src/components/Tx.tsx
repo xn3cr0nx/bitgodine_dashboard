@@ -19,7 +19,7 @@ const Tx: React.FC<Props> = ({ tx }) => {
   }, [tx]);
 
   return (
-    <div className={cx("mb-5 w-100 card bg-transparent text-white border-0")}>
+    <div className={cx("mb-5 w-100 card bg-transparent border-0", theme.text)}>
       {Object.keys(txFields)
         .filter(f => !["input", "output"].includes(f))
         .map((f, i) => {

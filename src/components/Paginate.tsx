@@ -34,7 +34,7 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
         return (
           <PaginationItem key={i}>
             <PaginationLink
-              className={cx({ [`${theme} text-white`]: index == i })}
+              className={cx({ [`${theme.bg} ${theme.text}`]: index == i })}
               onClick={(e): void => {
                 e.preventDefault();
                 setIndex(i);

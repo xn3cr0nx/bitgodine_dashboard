@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import cx from "classnames";
 import { Theme as T } from "context";
-import { Themes } from "context/theme";
+import { Background } from "context/theme";
 import { Container, Card, CardHeader, CardBody } from "reactstrap";
 import ThemeButton from "components/styled/ThemeButton";
 import { writeStorage } from "@rehooks/local-storage";
@@ -9,7 +9,7 @@ import { writeStorage } from "@rehooks/local-storage";
 const Theme: React.FC = () => {
   const { theme, dispatch } = useContext(T);
 
-  const changeTheme = (t: Themes): void => {
+  const changeTheme = (t: Background): void => {
     dispatch({ type: "THEME", payload: t });
     writeStorage("theme", t);
   };
@@ -17,7 +17,7 @@ const Theme: React.FC = () => {
   return (
     <Container className="p-3">
       <Card>
-        <CardHeader className={cx("h2 text-white", theme)}>Theme</CardHeader>
+        <CardHeader className={cx("h2", theme.bg, theme.text)}>Theme</CardHeader>
         <CardBody
           className="p-2 align-items-center"
           style={{
@@ -26,9 +26,13 @@ const Theme: React.FC = () => {
             gridTemplateColumns: "repeat(auto-fill, minmax(10rem, 1fr))",
             gridAutoRows: "1fr",
           }}>
-          {Object.keys(Themes).map(t => {
+          {Object.keys(Background).map(t => {
             return (
-              <ThemeButton key={t} onClick={(): void => changeTheme((Themes as any)[t])} theme={(Themes as any)[t]} />
+              <ThemeButton
+                key={t}
+                onClick={(): void => changeTheme((Background as any)[t])}
+                theme={(Background as any)[t]}
+              />
             );
           })}
         </CardBody>

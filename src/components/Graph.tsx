@@ -57,7 +57,7 @@ export interface EdgeID {
 export interface Event {
   nodes: id[];
   edges: string[];
-  event: PointerEvent;
+  event: any;
   pointer: Pointer;
 }
 
@@ -82,7 +82,7 @@ export interface Zoom {
 
 export interface Hover {
   node: id;
-  event: PointerEvent;
+  event: any;
   pointer: Pointer;
 }
 
@@ -178,17 +178,17 @@ const Network: React.FC<Props> = ({ graph, events, style }) => {
     <Card className="py-4 px-4 flex flex-row position-absolute mt-8 right-5 z-10">
       <label className="custom-toggle mr-4">
         <input type="checkbox" defaultChecked={physics} onClick={(): void => setPhysics(!physics)} />
-        <span className={cx("custom-toggle-slider rounded-circle", theme)} />
+        <span className={cx("custom-toggle-slider rounded-circle", theme.bg, theme.text)} />
         <span className="position-absolute top-4">Gravity</span>
       </label>
       <label className="custom-toggle">
         <input type="checkbox" defaultChecked={hierarchy} onClick={(): void => setHierarchy(!hierarchy)} />
-        <span className={cx("custom-toggle-slider rounded-circle", theme)} />
+        <span className={cx("custom-toggle-slider rounded-circle", theme.bg, theme.text)} />
         <span className="position-absolute top-4">Hierarchy</span>
       </label>
       {/*<label className="custom-toggle">
         <input type="checkbox" defaultChecked={labels} onClick={(): void => setLabels(!labels)} />
-        <span className={cx("custom-toggle-slider rounded-circle", theme)} />
+        <span className={cx("custom-toggle-slider rounded-circle", theme.bg, theme.text)} />
         <span className="position-absolute top-4">Labels</span>
   </label>*/}
     </Card>

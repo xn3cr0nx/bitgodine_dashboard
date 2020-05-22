@@ -18,9 +18,9 @@ const TxCard: React.FC<Props> = ({ tx, className, style }) => {
 
   const styles = useMemo(() => {
     return {
-      card: cx("shadow-lg border-0 mb-3", theme),
-      cardHeader: cx("py-2 flex flex-row border-bottom rounded-bottom", theme),
-      cardBody: cx("py-2 flex flex-column rounded-bottom", theme),
+      card: cx("shadow-lg border-0 mb-3", theme.bg, theme.text),
+      cardHeader: cx("py-2 flex flex-row border-bottom rounded-bottom", theme.bg, theme.text),
+      cardBody: cx("py-2 flex flex-column rounded-bottom", theme.bg, theme.text),
       div: "flex flex-row w-100 mb-3",
     };
   }, [theme]);
@@ -31,7 +31,7 @@ const TxCard: React.FC<Props> = ({ tx, className, style }) => {
         <Link to={`?tx=${tx.txid}`}>{tx.txid}</Link>
         <label className="custom-toggle">
           <input type="checkbox" onClick={(): void => setDetails(!details)} />
-          <span className={cx("custom-toggle-slider rounded-circle", theme)} />
+          <span className={cx("custom-toggle-slider rounded-circle", theme.bg, theme.text)} />
         </label>
       </CardHeader>
       <CardBody className="py-4">

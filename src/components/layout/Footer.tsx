@@ -28,7 +28,7 @@ const CardsFooter: React.FC = () => {
                 </UncontrolledTooltip>
               </Col>
               <Col xs="1" style={{ marginLeft: "0.8rem", marginTop: "0.5rem" }}>
-                <h6 className="mb-0 font-weight-light">3D4U5ckd9SXNTBHB5wRERTuriu7choM24E</h6>
+                <h6 className="mb-0 font-weight-light text-sm">3D4U5ckd9SXNTBHB5wRERTuriu7choM24E</h6>
               </Col>
             </Row>
           </Col>

@@ -67,14 +67,13 @@ const initialState: State = {
 export const Store = createContext<any>(initialState);
 
 function reducer(state: State = initialState, { type, payload }: ReducerAction): State {
+  console.log("@@ Store context action", { type, payload });
   switch (type) {
     case "PAYLOAD":
-      console.log("GOT PAYLOAD", payload);
       return {
         ...state,
       };
     case "BLOCK":
-      console.log("GOT BLOCK", payload);
       return {
         ...state,
         block: payload,
@@ -85,7 +84,6 @@ function reducer(state: State = initialState, { type, payload }: ReducerAction):
         block: null,
       };
     case "TX":
-      console.log("GOT TX", payload);
       return {
         ...state,
         transaction: payload,
@@ -96,7 +94,6 @@ function reducer(state: State = initialState, { type, payload }: ReducerAction):
         transaction: null,
       };
     case "TRACE":
-      console.log("GOT TRACE", payload);
       return {
         ...state,
         trace: payload,

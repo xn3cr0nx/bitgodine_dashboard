@@ -5,14 +5,18 @@ import { Theme } from "context";
 import React, { useContext } from "react";
 import { useWindowSize } from "react-recipes";
 
-export default function PatternSection() {
+interface Props {
+  height?: string | number;
+}
+
+const PatternSection: React.FC<Props> = ({ height }) => {
   const { theme } = useContext(Theme);
   const { width } = useWindowSize();
 
   return (
     <section
       className="section section-lg section-shaped pb-0 pt-0 position-absolute t-0 w-100"
-      style={{ height: width > laptop ? "60vh" : "80vh" }}>
+      style={{ height: height ? height : width > laptop ? "60vh" : "80vh" }}>
       <div
         className={cx("shape shape-style-1 shape-primary")}
         style={{
@@ -41,4 +45,6 @@ export default function PatternSection() {
       </div>
     </section>
   );
-}
+};
+
+export default PatternSection;

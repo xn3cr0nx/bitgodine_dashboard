@@ -144,7 +144,7 @@ const App: React.FC = () => {
   return (
     <>
       <PatternSection />
-      <div className={cx("p-2 align-items-center", theme)} style={{ minHeight: "100vh" }}>
+      <div className={cx("p-2 align-items-center", theme.bg, theme.text)} style={{ minHeight: "100vh" }}>
         <Alert visible={!!alert} message={alert} />
 
         <SearchSection action={handleKeyPress} placeholder="Block height, hash, transaction, address" set={setSearch} />
@@ -161,7 +161,7 @@ const App: React.FC = () => {
               <Container dir="horizontal">
                 <Row>
                   <Col xs="11">
-                    <p className="h2 text-white font-weight-bold">{`Block ${state.block.height}`}</p>
+                    <p className={(cx("h2 font-weight-bold"), theme.text)}>{`Block ${state.block.height}`}</p>
                   </Col>
                   <Col xs="1" className="pl-0">
                     <Pagination className="pagination pagination-lg" listClassName="pagination-lg">
@@ -201,7 +201,7 @@ const App: React.FC = () => {
             </>
           ) : requestType === Request.Tx && state.transaction ? (
             <>
-              <p className="h2 text-white font-weight-bold">Transaction</p>
+              <p className={cx("h2 font-weight-bold", theme.text)}>Transaction</p>
               <Tx tx={state.transaction} />
             </>
           ) : requestType === Request.Address && state.address ? (

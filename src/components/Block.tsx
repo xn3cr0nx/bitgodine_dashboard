@@ -1,6 +1,5 @@
 import cx from "classnames";
 import Alert from "components/styled/Alert";
-import { textColor } from "constants/colors";
 import { Theme } from "context";
 import { Block as BlockProps } from "context/store";
 import React, { useContext, useMemo, useState } from "react";
@@ -27,7 +26,7 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
   }, [block]);
 
   return (
-    <div className="mb-5 w-100 card bg-transparent text-white border-0">
+    <div className={cx("mb-5 w-100 card bg-transparent border-0", theme.text)}>
       <Alert visible={isCopied} type="success" message={"Copied to cliboard"} />
 
       {Object.keys(blockFields).map((f, i) => {
