@@ -49,6 +49,19 @@ export interface Output {
   index: number;
 }
 
+export interface Trace {
+  txid: string;
+  next: Next[];
+}
+
+export interface Next {
+  txid: string;
+  receiver: string;
+  vout: number;
+  amount: number;
+  weight?: number;
+}
+
 interface State {
   block: Block | null;
   transaction: any;

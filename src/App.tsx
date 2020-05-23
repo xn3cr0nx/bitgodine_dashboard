@@ -78,7 +78,7 @@ const App: React.FC = () => {
         window.scrollTo(0, 0);
       })();
     }
-  }, [tx]);
+  }, [tx, mutate]);
 
   useEffect(() => {
     if (block) {
@@ -88,7 +88,7 @@ const App: React.FC = () => {
         window.scrollTo(0, 0);
       })();
     }
-  }, [block]);
+  }, [block, mutate]);
 
   useEffect(() => {
     if (height) {
@@ -97,7 +97,7 @@ const App: React.FC = () => {
         await mutate(endpoint + "block-height/" + height);
       })();
     }
-  }, [height]);
+  }, [height, mutate]);
 
   useEffect(() => {
     if (address) {
@@ -107,7 +107,7 @@ const App: React.FC = () => {
         window.scrollTo(0, 0);
       })();
     }
-  }, [address]);
+  }, [address, mutate]);
 
   useEffect(() => {
     (async (): Promise<void> => {

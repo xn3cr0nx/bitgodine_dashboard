@@ -62,7 +62,7 @@ const Header: React.FC = () => {
         <UncontrolledCollapse
           toggler="#navbar_global"
           navbar
-          className={cx(collapseClasses, theme.bg, theme.text)}
+          className={cx(collapseClasses, theme.text)}
           onExiting={onExiting}
           onExited={onExited}>
           <div className={cx("navbar-collapse-header", theme.text)}>
