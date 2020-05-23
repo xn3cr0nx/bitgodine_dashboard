@@ -110,10 +110,9 @@ const App: React.FC = () => {
   }, [error]);
 
   useEffect(() => {
+    setAdditional({ nodes: [], edges: [] });
     if (network) {
-      console.log("REDRAWING", network);
       network.redraw();
-      console.log("REDRAWN", network);
     }
   }, [depth]);
 
