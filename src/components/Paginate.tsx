@@ -20,21 +20,23 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
       listClassName="justify-content-center pagination-lg">
       <PaginationItem>
         <PaginationLink
-          aria-label="Previous"
+          aria-label="First"
           onClick={(e): void => {
             e.preventDefault();
             if (!index) return;
-            setIndex(index - 1);
+            // setIndex(index - 1);
+            setIndex(0);
           }}>
           <i className="fa fa-angle-left" />
-          <span className="sr-only">Previous</span>
+          <span className="sr-only">First</span>
         </PaginationLink>
       </PaginationItem>
       {Array.from(Array(Math.ceil(list.length / pageLength)).keys()).map((n, i) => {
+        if ((index > 2 && i < index - 2) || (index < Math.ceil(list.length / pageLength) - 1 && i > index + 2)) return;
         return (
           <PaginationItem key={i}>
             <PaginationLink
-              className={cx({ [`${theme.bg} ${theme.text}`]: index == i })}
+              className={cx({ [`${theme.bg} ${theme.text}`]: index === i })}
               onClick={(e): void => {
                 e.preventDefault();
                 setIndex(i);
@@ -46,14 +48,15 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
       })}
       <PaginationItem>
         <PaginationLink
-          aria-label="Next"
+          aria-label="Last"
           onClick={(e): void => {
             e.preventDefault();
-            if (index == Math.ceil(list.length / pageLength) - 1) return;
-            setIndex(index + 1);
+            if (index === Math.ceil(list.length / pageLength) - 1) return;
+            // setIndex(index + 1);
+            setIndex(Math.ceil(list.length / pageLength) - 1);
           }}>
           <i className="fa fa-angle-right" />
-          <span className="sr-only">Next</span>
+          <span className="sr-only">Last</span>
         </PaginationLink>
       </PaginationItem>
     </Pagination>
