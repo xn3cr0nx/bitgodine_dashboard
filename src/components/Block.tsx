@@ -39,9 +39,9 @@ const Block: React.FC<Props> = ({ block, txsList }) => {
             <p
               className="m-0 font-weight-normal text-nowrap"
               onClick={(): void => {
-                if (f == "id") setIsCopied((block as any)[f]);
+                if (f === "id") setIsCopied((block as any)[f]);
               }}
-              style={f == "id" ? { cursor: "pointer", fontWeight: "bold" } : {}}>
+              style={f === "id" ? { cursor: "pointer", fontWeight: "bold" } : {}}>
               {(block as any)[f]}
             </p>
           </div>

@@ -2,6 +2,7 @@ import { useScrollPosition } from "@n8tb1t/use-scroll-position";
 import cx from "classnames";
 import Network, { Edge, Event, Events, Graph, Hover, Node } from "components/Graph";
 import PatternSection from "components/layout/PatternSection";
+import Paginate from "components/Paginate";
 import SearchSection from "components/SearchSection";
 import Alert from "components/styled/Alert";
 import TraceCard from "components/TraceCard";
@@ -32,6 +33,7 @@ const App: React.FC = () => {
   const [search, setSearch] = useState("");
   const [alert, setAlert] = useState("");
   const [prev, setPrev] = useState("");
+  const [page, setPage] = useState(0);
   const [network, setNetwork] = useState<any>(null);
   const [depth, setDepth] = useState("10");
   const [exploreLeaf, setExploreLeaf] = useState<number | undefined>(undefined);
@@ -48,11 +50,16 @@ const App: React.FC = () => {
     setY(event.currPos.y);
   });
 
-  const yBoundary = -500;
+  const yBoundary = -400;
+  const limit = 1;
 
   useEffect(() => {
     if (selected !== undefined && y > yBoundary) setSelected(undefined);
   }, [y]);
+
+  useEffect(() => {
+    if (selected !== undefined) setSelected(undefined);
+  }, [page]);
 
   const handleKeyPress = async (event: React.KeyboardEvent<Element>): Promise<void> => {
     if (event.key === "Enter" && search) {
@@ -73,12 +80,12 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (address) {
+    if (address && (!page || !(page % limit))) {
       (async (): Promise<void> => {
-        await mutate(endpoint + "trace/address/" + address);
+        await mutate(endpoint + "trace/address/" + address + `?limit=${limit}&skip=${Math.floor(page / limit)}`);
       })();
     }
-  }, [address, mutate]);
+  }, [address, mutate, page]);
 
   useEffect(() => {
     (async (): Promise<void> => {
@@ -111,8 +118,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setAdditional({ nodes: [], edges: [] });
+    if (selected) setSelected(undefined);
     if (network) {
-      network.redraw();
+      // network.redraw();
     }
   }, [depth]);
 
@@ -159,7 +167,7 @@ const App: React.FC = () => {
     if (trace.next) {
       trace.next.forEach(n => {
         const { nodes: recNodes, edges: recEdges } = exploreTrace(
-          state.trace.traces[n.txid],
+          state.trace.traces[page % limit][n.txid],
           index,
           index + incr + 1,
           n.weight,
@@ -181,30 +189,26 @@ const App: React.FC = () => {
 
   const graph = useMemo((): Graph => {
     const graph: Graph = { nodes: [], edges: [] };
-    if (state.trace && (state.trace?.traces ?? false)) {
-      const traces: Trace[] = [];
-      for (const t of Object.keys(state.trace.traces)) {
+    if (state?.trace && state?.trace?.traces && state?.trace?.traces[page % limit]) {
+      let trace: Trace = { txid: "", next: [] };
+      for (const t of Object.keys(state.trace.traces[page % limit])) {
         let found = false;
-        for (const c of Object.keys(state.trace.traces)) {
-          if (state.trace.traces[c]?.next?.map((n: Next) => n.txid)?.includes(t) ?? false) {
+        for (const c of Object.keys(state.trace.traces[page % limit])) {
+          if (state.trace.traces[page % limit][c]?.next?.map((n: Next) => n.txid)?.includes(t)) {
             found = true;
           }
         }
         if (!found) {
-          traces.push(state.trace.traces[t]);
+          trace = state.trace.traces[page % limit][t];
         }
       }
 
-      let incr = 0;
-      traces.forEach((trace, i) => {
-        const { nodes, edges } = exploreTrace(trace, undefined, i + incr, undefined, 1);
-        graph.nodes.push(...nodes);
-        graph.edges.push(...edges);
-        incr += nodes.length;
-      });
+      const { nodes, edges } = exploreTrace(trace, undefined, 0, undefined, 1);
+      graph.nodes.push(...nodes);
+      graph.edges.push(...edges);
     }
     return graph;
-  }, [state.trace, depth]);
+  }, [state.trace, depth, page]);
 
   const combinedGraph = useMemo((): Graph => {
     const combined = { nodes: graph.nodes.concat(additional.nodes), edges: graph.edges.concat(additional.edges) };
@@ -223,6 +227,7 @@ const App: React.FC = () => {
   const calculateDepth = (node: number): number => {
     if (!node) return 0;
     const edge = combinedGraph.edges.filter(edge => edge.to === node)[0];
+    if (!edge) return 0;
     const depth = calculateDepth(edge.from);
     return depth + 1;
   };
@@ -233,10 +238,14 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (exploreLeaf !== undefined) {
-      const trace = state.trace.traces[nodesMap[exploreLeaf]];
+      const trace = state.trace.traces[page % limit][nodesMap[exploreLeaf]];
       const nodeDepth = calculateDepth(exploreLeaf);
       const edge = combinedGraph.edges.filter(edge => edge.to === exploreLeaf)[0];
-      const fromTrace: Trace = state.trace.traces[nodesMap[edge.from]];
+      if (!edge) {
+        setExploreLeaf(undefined);
+        return;
+      }
+      const fromTrace: Trace = state.trace.traces[page % limit][nodesMap[edge.from]];
       const weight = fromTrace.next.filter(n => n.txid === trace.txid)[0]?.weight;
       const { nodes, edges } = exploreTrace(trace, edge.from, combinedGraph.nodes.length - 1, weight, nodeDepth);
       if (nodes.length > 1) {
@@ -285,41 +294,51 @@ const App: React.FC = () => {
           />
         ) : combinedGraph?.nodes?.length ?? false ? (
           <>
-            <Network
-              graph={combinedGraph}
-              events={events}
-              setNetwork={setNetwork}
-              controls={
-                <InputGroup>
-                  <InputGroupButtonDropdown
-                    addonType="prepend"
-                    isOpen={openDepth}
-                    toggle={(): void => setOpenDepth(!openDepth)}>
-                    <Input
-                      placeholder={depth}
-                      disabled
-                      className={cx("border", theme.bg, theme.text)}
-                      style={{ width: "3rem", borderRadius: 0 }}
-                    />
-                    <DropdownToggle split outline />
-                    <DropdownMenu className={cx(theme.bg, theme.text)}>
-                      <DropdownItem header>Depth</DropdownItem>
-                      <DropdownItem divider />
-                      {[10, 20, 50, 100, 200].map(d => (
-                        <DropdownItem key={d} className={cx(theme.text)} onClick={(): void => setDepth(`${d}`)}>
-                          {d}
-                        </DropdownItem>
-                      ))}
-                    </DropdownMenu>
-                  </InputGroupButtonDropdown>
-                </InputGroup>
-              }
-              style={{ marginTop: "8rem" }}
+            <Paginate
+              classes="mt-9"
+              itemsPerPage={1}
+              list={state.trace.occurences.map((txid: string, i: number) => (
+                <Network
+                  key={i}
+                  title={"Starting from transaction " + combinedGraph.nodes[combinedGraph.nodes.length - 1].label}
+                  graph={combinedGraph}
+                  events={events}
+                  setNetwork={setNetwork}
+                  controls={
+                    <InputGroup>
+                      <InputGroupButtonDropdown
+                        addonType="prepend"
+                        isOpen={openDepth}
+                        toggle={(): void => setOpenDepth(!openDepth)}>
+                        <Input
+                          placeholder={depth}
+                          disabled
+                          className={cx("border", theme.bg, theme.text)}
+                          style={{ width: "3rem", borderRadius: 0 }}
+                        />
+                        <DropdownToggle split outline />
+                        <DropdownMenu className={cx(theme.bg, theme.text)}>
+                          <DropdownItem header>Depth</DropdownItem>
+                          <DropdownItem divider />
+                          {[10, 20, 50, 100, 200].map(d => (
+                            <DropdownItem key={d} className={cx(theme.text)} onClick={(): void => setDepth(`${d}`)}>
+                              {d}
+                            </DropdownItem>
+                          ))}
+                        </DropdownMenu>
+                      </InputGroupButtonDropdown>
+                    </InputGroup>
+                  }
+                  style={{}}
+                />
+              ))}
+              index={page}
+              setIndex={setPage}
             />
             {hovered !== undefined ? (
-              <TraceCard trace={state?.trace?.traces[nodesMap[hovered]]} />
+              <TraceCard trace={state?.trace?.traces[page % limit][nodesMap[hovered]]} />
             ) : selected !== undefined ? (
-              <TraceCard trace={state?.trace?.traces[nodesMap[selected]]} />
+              <TraceCard trace={state?.trace?.traces[page % limit][nodesMap[selected]]} />
             ) : (
               false
             )}

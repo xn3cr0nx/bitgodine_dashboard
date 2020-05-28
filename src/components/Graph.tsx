@@ -114,6 +114,7 @@ export interface Events {
 }
 
 export interface Props {
+  title?: string;
   graph: Graph;
   events?: Events;
   style?: any;
@@ -121,7 +122,7 @@ export interface Props {
   setNetwork?: React.Dispatch<SetStateAction<any>>;
 }
 
-const Network: React.FC<Props> = ({ graph, events, style, controls, setNetwork }) => {
+const Network: React.FC<Props> = ({ title, graph, events, style, controls, setNetwork }) => {
   const { theme } = useContext(Theme);
   const [physics, setPhysics] = useState(true);
   const [hierarchy, setHierarchy] = useState(false);
@@ -179,7 +180,7 @@ const Network: React.FC<Props> = ({ graph, events, style, controls, setNetwork }
   );
 
   const Controls = (
-    <Card className={cx("py-4 px-4 flex flex-row position-absolute mt-8 right-5 z-10 border", theme.bg)}>
+    <Card className={cx("py-4 px-4 flex flex-row position-absolute right-5 z-10 border", theme.bg)}>
       <div className="mr-4">{controls}</div>
       <label className="custom-toggle mr-4">
         <input type="checkbox" defaultChecked={physics} onClick={(): void => setPhysics(!physics)} />
@@ -197,6 +198,7 @@ const Network: React.FC<Props> = ({ graph, events, style, controls, setNetwork }
   return (
     <>
       {Controls}
+      {title && <p className={cx("py-4 font-weight-bold text-center", theme.text)}>{title}</p>}
       <Graph
         graph={graph}
         options={options}

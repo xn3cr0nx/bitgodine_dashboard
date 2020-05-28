@@ -74,7 +74,7 @@ const initialState: State = {
   block: null,
   transaction: null,
   address: null,
-  trace: null,
+  trace: {},
   cluster: {},
 };
 export const Store = createContext<any>(initialState);

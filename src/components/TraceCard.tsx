@@ -20,11 +20,13 @@ const TraceCard: React.FC<TraceCardProps> = ({ trace }) => {
     };
   }, [theme]);
 
+  if (!trace?.next) return null;
+
   return (
     <Card className="position-fixed top-0 text-sm text-nowrap z-10 top-3">
-      <CardHeader className="text-dark flex justify-content-between">{trace.txid}</CardHeader>
+      <CardHeader className="text-dark flex justify-content-between">{trace?.txid ?? ""}</CardHeader>
       <CardBody className={cx("py-2 flex flex-column rounded-bottom")}>
-        {trace?.next.map((next, k) => {
+        {trace?.next?.map((next, k) => {
           return (
             <Card key={k} className={cx("shadow-lg border-0 mb-3", theme.bg, theme.text)}>
               <CardHeader

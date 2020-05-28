@@ -6,17 +6,19 @@ import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 interface Props {
   list: any[];
   index: number;
+  itemsPerPage?: number;
   setIndex: React.Dispatch<SetStateAction<number>>;
+  classes?: string;
 }
 
 const pageLength = 5;
 
-const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
+const Navigation: React.FC<Props> = ({ list, itemsPerPage, index, setIndex, classes }) => {
   const { theme } = useContext(Theme);
 
   return (
     <Pagination
-      className="pagination justify-content-center pagination-lg mt-5"
+      className={cx("pagination justify-content-center pagination-lg mt-5", classes)}
       listClassName="justify-content-center pagination-lg">
       <PaginationItem>
         <PaginationLink
@@ -31,8 +33,12 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
           <span className="sr-only">First</span>
         </PaginationLink>
       </PaginationItem>
-      {Array.from(Array(Math.ceil(list.length / pageLength)).keys()).map((n, i) => {
-        if ((index > 2 && i < index - 2) || (index < Math.ceil(list.length / pageLength) - 1 && i > index + 2)) return;
+      {Array.from(Array(Math.ceil(list.length / (itemsPerPage ?? pageLength))).keys()).map((n, i) => {
+        if (
+          (index > 2 && i < index - 2) ||
+          (index < Math.ceil(list.length / (itemsPerPage ?? pageLength)) - 1 && i > index + 2)
+        )
+          return;
         return (
           <PaginationItem key={i}>
             <PaginationLink
@@ -51,9 +57,9 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
           aria-label="Last"
           onClick={(e): void => {
             e.preventDefault();
-            if (index === Math.ceil(list.length / pageLength) - 1) return;
+            if (index === Math.ceil(list.length / (itemsPerPage ?? pageLength)) - 1) return;
             // setIndex(index + 1);
-            setIndex(Math.ceil(list.length / pageLength) - 1);
+            setIndex(Math.ceil(list.length / (itemsPerPage ?? pageLength)) - 1);
           }}>
           <i className="fa fa-angle-right" />
           <span className="sr-only">Last</span>
@@ -63,12 +69,15 @@ const Navigation: React.FC<Props> = ({ list, index, setIndex }) => {
   );
 };
 
-const Paginate: React.FC<Props> = ({ list, index, setIndex }) => {
+const Paginate: React.FC<Props> = ({ list, itemsPerPage, index, setIndex, classes }) => {
   return (
     <>
-      <Navigation list={list} index={index} setIndex={setIndex} />
-      {list.slice(pageLength * index, pageLength * index + 5)}
-      <Navigation list={list} index={index} setIndex={setIndex} />
+      <Navigation list={list} index={index} setIndex={setIndex} classes={classes} itemsPerPage={itemsPerPage} />
+      {list.slice(
+        (itemsPerPage ?? pageLength) * index,
+        (itemsPerPage ?? pageLength) * index + (itemsPerPage ?? pageLength),
+      )}
+      <Navigation list={list} index={index} setIndex={setIndex} itemsPerPage={itemsPerPage} />
     </>
   );
 };
