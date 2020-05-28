@@ -69,6 +69,9 @@ const App: React.FC = () => {
             dispatch({
               type: "RESET_TRACE",
             });
+            setPage(0);
+            setDepth("10");
+            setSelected(undefined);
           }
           setAddress(search);
           setPrev(search);
@@ -126,6 +129,7 @@ const App: React.FC = () => {
 
   const exploreTrace = (
     trace: Trace,
+    vout: number,
     prev: number | undefined,
     index: number,
     weight: number | undefined,
@@ -139,10 +143,10 @@ const App: React.FC = () => {
       const explorationEnd = exploreLeaf !== undefined && exploreLeaf - currDepth >= 10;
       if (!(exploring && !explorationEnd)) {
         return {
-          nodes: trace.next.map(n => ({
+          nodes: trace?.next?.map(n => ({
             id: -1,
-            label: n.txid,
-          })),
+            label: n.txid + ":" + n.vout,
+          })) ?? [{ id: -1, label: "null" }],
           edges,
         };
       }
@@ -150,7 +154,7 @@ const App: React.FC = () => {
 
     const node: Node = {
       id: index,
-      label: trace.txid,
+      label: trace.txid + ":" + vout,
       mass: 3,
     };
 
@@ -166,8 +170,9 @@ const App: React.FC = () => {
     let incr = 0;
     if (trace.next) {
       trace.next.forEach(n => {
-        const { nodes: recNodes, edges: recEdges } = exploreTrace(
-          state.trace.traces[page % limit][n.txid],
+        let { nodes: recNodes, edges: recEdges } = exploreTrace(
+          state.trace.traces[page % limit][n.txid + ":" + n.vout],
+          n.vout,
           index,
           index + incr + 1,
           n.weight,
@@ -176,6 +181,26 @@ const App: React.FC = () => {
         if (recNodes.length && !recEdges.length) {
           node.color = danger;
         } else {
+          // remove multiple equal branches merging paths together and deleting orphans branches
+          recNodes.forEach(node => {
+            const filtered = recNodes.filter(n => node.label == n.label);
+            if (filtered.length > 1) {
+              filtered
+                .sort((a, b) => b.id - a.id)
+                .forEach((repeated, i) => {
+                  if (i > 0) {
+                    recEdges.filter((edge, j) => {
+                      if (edge.to == repeated.id) {
+                        recEdges[j].to = filtered[0].id;
+                      }
+                    });
+                    recNodes = recNodes.filter(node => node.id != repeated.id);
+                    recEdges = recEdges.filter(edge => edge.from != repeated.id);
+                  }
+                });
+            }
+          });
+
           nodes.push(...recNodes);
           edges.push(...recEdges);
           incr += recNodes.length;
@@ -194,7 +219,7 @@ const App: React.FC = () => {
       for (const t of Object.keys(state.trace.traces[page % limit])) {
         let found = false;
         for (const c of Object.keys(state.trace.traces[page % limit])) {
-          if (state.trace.traces[page % limit][c]?.next?.map((n: Next) => n.txid)?.includes(t)) {
+          if (state.trace.traces[page % limit][c]?.next?.map((n: Next) => n.txid + ":" + n.vout)?.includes(t)) {
             found = true;
           }
         }
@@ -203,7 +228,7 @@ const App: React.FC = () => {
         }
       }
 
-      const { nodes, edges } = exploreTrace(trace, undefined, 0, undefined, 1);
+      const { nodes, edges } = exploreTrace(trace, 0, undefined, 0, undefined, 1);
       graph.nodes.push(...nodes);
       graph.edges.push(...edges);
     }
@@ -212,7 +237,6 @@ const App: React.FC = () => {
 
   const combinedGraph = useMemo((): Graph => {
     const combined = { nodes: graph.nodes.concat(additional.nodes), edges: graph.edges.concat(additional.edges) };
-    console.log("updated combined graph", combined);
     return combined;
   }, [graph, additional]);
 
@@ -246,8 +270,8 @@ const App: React.FC = () => {
         return;
       }
       const fromTrace: Trace = state.trace.traces[page % limit][nodesMap[edge.from]];
-      const weight = fromTrace.next.filter(n => n.txid === trace.txid)[0]?.weight;
-      const { nodes, edges } = exploreTrace(trace, edge.from, combinedGraph.nodes.length - 1, weight, nodeDepth);
+      const { weight, vout } = fromTrace.next.filter(n => n.txid === trace.txid)[0];
+      const { nodes, edges } = exploreTrace(trace, vout, edge.from, combinedGraph.nodes.length - 1, weight, nodeDepth);
       if (nodes.length > 1) {
         setAdditional({
           nodes: additional.nodes.concat(nodes.filter(node => node.id !== exploreLeaf)),

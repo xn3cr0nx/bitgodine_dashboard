@@ -8,6 +8,20 @@ interface TraceCardProps {
   trace: Trace;
 }
 
+const heuristics = {
+  0: "Locktime",
+  1: "Peeling Chain",
+  2: "Power of Ten",
+  3: "Optimal Change",
+  4: "Address Type",
+  5: "Address Reuse",
+  6: "Shadow",
+  7: "Client Behaviour",
+  8: "Exact Amount",
+  9: "Backward",
+  10: "Forward",
+};
+
 const TraceCard: React.FC<TraceCardProps> = ({ trace }) => {
   const { theme } = useContext(Theme);
   const [details, setDetails] = useState(false);
@@ -19,6 +33,16 @@ const TraceCard: React.FC<TraceCardProps> = ({ trace }) => {
       detail: "text-sm mb-0 flex flex-nowrap text-break",
     };
   }, [theme]);
+
+  const markToHeuristics = (mask: string): string => {
+    const list: string[] = [];
+    for (let i = 0; i < mask.length; i++) {
+      if (mask.charAt(mask.length - 1 - i) == "1") {
+        list.push((heuristics as any)[i]);
+      }
+    }
+    return list.join(",");
+  };
 
   if (!trace?.next) return null;
 
@@ -54,6 +78,10 @@ const TraceCard: React.FC<TraceCardProps> = ({ trace }) => {
                   <div className={styles.div}>
                     <p className={styles.label}>Amount</p>
                     <p className={styles.detail}>{next.amount}</p>
+                  </div>
+                  <div className={styles.div}>
+                    <p className={styles.label}>Analysis</p>
+                    <p className={styles.detail}>{markToHeuristics(next.analysis)}</p>
                   </div>
                 </CardBody>
               )}

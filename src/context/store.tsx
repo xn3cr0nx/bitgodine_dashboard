@@ -57,6 +57,7 @@ export interface Trace {
 export interface Next {
   txid: string;
   receiver: string;
+  analysis: string;
   vout: number;
   amount: number;
   weight?: number;
