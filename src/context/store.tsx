@@ -63,6 +63,12 @@ export interface Next {
   weight?: number;
 }
 
+export interface Cluster {
+  address: string;
+  cluster: number;
+  nickname: string;
+}
+
 interface State {
   block: Block | null;
   transaction: any;
@@ -116,6 +122,16 @@ function reducer(state: State = initialState, { type, payload }: ReducerAction):
       return {
         ...state,
         trace: null,
+      };
+    case "CLUSTER":
+      return {
+        ...state,
+        cluster: payload,
+      };
+    case "RESET_CLUSTER":
+      return {
+        ...state,
+        cluster: null,
       };
     default:
       return state;
