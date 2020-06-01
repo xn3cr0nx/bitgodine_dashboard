@@ -24,6 +24,7 @@ export interface Node {
   group?: number;
   mass?: number;
   color?: Color | string;
+  cid?: id;
 }
 
 export interface Edge {
@@ -31,6 +32,7 @@ export interface Edge {
   to: id;
   label?: string;
   color?: Color | string;
+  arrows?: { to: { type: string } };
 }
 
 export interface Graph {
@@ -118,16 +120,18 @@ export interface Props {
   graph: Graph;
   events?: Events;
   style?: any;
+  classes?: string;
   controls?: any;
+  options?: any;
   setNetwork?: React.Dispatch<SetStateAction<any>>;
 }
 
-const Network: React.FC<Props> = ({ title, graph, events, style, controls, setNetwork }) => {
+const Network: React.FC<Props> = ({ title, graph, events, style, classes, controls, options, setNetwork }) => {
   const { theme } = useContext(Theme);
   const [physics, setPhysics] = useState(true);
   const [hierarchy, setHierarchy] = useState(false);
 
-  const options = useMemo(
+  const opts = useMemo(
     () => ({
       layout: {
         hierarchical: {
@@ -175,13 +179,14 @@ const Network: React.FC<Props> = ({ title, graph, events, style, controls, setNe
         enabled: physics,
       },
       height: "1000px",
+      ...options,
     }),
-    [physics, hierarchy],
+    [physics, hierarchy, options],
   );
 
   const Controls = (
     <Card className={cx("py-4 px-4 flex flex-row position-absolute right-5 z-10 border", theme.bg)}>
-      <div className="mr-4">{controls}</div>
+      {controls && <div className="mr-4">{controls}</div>}
       <label className="custom-toggle mr-4">
         <input type="checkbox" defaultChecked={physics} onClick={(): void => setPhysics(!physics)} />
         <span className={cx("custom-toggle-slider rounded-circle", theme.bg, theme.text)} />
@@ -196,19 +201,19 @@ const Network: React.FC<Props> = ({ title, graph, events, style, controls, setNe
   );
 
   return (
-    <>
+    <div className={classes} style={style}>
       {Controls}
       {title && <p className={cx("py-4 font-weight-bold text-center", theme.text)}>{title}</p>}
       <Graph
         graph={graph}
-        options={options}
+        options={opts}
         events={events}
         getNetwork={(network: any): void => {
           if (setNetwork) setNetwork(network);
         }}
-        style={{ background: "transparent", ...style }}
+        style={{ background: "transparent" }}
       />
-    </>
+    </div>
   );
 };
 

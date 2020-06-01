@@ -11,6 +11,7 @@ import { endpoint } from "constants/config";
 import { Store, Theme } from "context";
 import { Next, Trace } from "context/store";
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import useKeyPress from "hooks/useKeyPress";
 import { useMutation } from "react-query";
 import {
   DropdownItem,
@@ -27,8 +28,11 @@ const fetchSearch = async (url: string): Promise<Response> => {
   return await fetch(url);
 };
 
-const App: React.FC = () => {
+const Tracing: React.FC = () => {
   const { theme } = useContext(Theme);
+  const arrowRight = useKeyPress("ArrowRight");
+  const arrowLeft = useKeyPress("ArrowLeft");
+  const escape = useKeyPress("Escape");
 
   const [search, setSearch] = useState("");
   const [alert, setAlert] = useState("");
@@ -282,6 +286,27 @@ const App: React.FC = () => {
     }
   }, [exploreLeaf]);
 
+  useEffect(() => {
+    if (arrowRight && selected != undefined && selected < combinedGraph.nodes.length - 1) {
+      setSelected(selected + 1);
+      network.selectNodes([selected + 1]);
+    }
+  }, [arrowRight]);
+
+  useEffect(() => {
+    if (arrowLeft && selected != undefined && selected > 0) {
+      setSelected(selected - 1);
+      network.selectNodes([selected - 1]);
+    }
+  }, [arrowLeft]);
+
+  useEffect(() => {
+    if (escape && selected != undefined) {
+      setSelected(undefined);
+      network.unselectAll();
+    }
+  }, [escape]);
+
   const events: Events = {
     click: (event: Event): void => {
       if (selected !== undefined && !event.nodes) setSelected(undefined);
@@ -353,7 +378,6 @@ const App: React.FC = () => {
                       </InputGroupButtonDropdown>
                     </InputGroup>
                   }
-                  style={{}}
                 />
               ))}
               index={page}
@@ -375,4 +399,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Tracing;

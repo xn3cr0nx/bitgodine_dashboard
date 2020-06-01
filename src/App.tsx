@@ -161,7 +161,7 @@ const App: React.FC = () => {
               <Container dir="horizontal">
                 <Row>
                   <Col xs="11">
-                    <p className={(cx("h2 font-weight-bold"), theme.text)}>{`Block ${state.block.height}`}</p>
+                    <p className={cx("h2 font-weight-bold", theme.text)}>{`Block ${state.block.height}`}</p>
                   </Col>
                   <Col xs="1" className="pl-0">
                     <Pagination className="pagination pagination-lg" listClassName="pagination-lg">

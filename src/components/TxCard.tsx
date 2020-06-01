@@ -71,7 +71,8 @@ const TxCard: React.FC<Props> = ({ tx, className, style }) => {
               );
             })}
           </Col>
-          <div className="icon icon-shape icon-shape-default rounded-circle align-self-center">
+          <div
+            className={cx("icon icon-shape icon-shape-default rounded-circle align-self-center", theme.bg, theme.text)}>
             <i className="ni ni-bold-right" />
           </div>
           <Col style={{ flex: "0 0 50%", maxWidth: "47%" }}>
