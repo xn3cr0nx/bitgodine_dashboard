@@ -4,9 +4,12 @@ import "assets/vendor/nucleo/css/nucleo.css";
 import Footer from "components/layout/Footer";
 import Header from "components/layout/Header";
 import Clusters from "components/pages/Clusters";
+import Explorer from "components/pages/Explorer";
+import Login from "components/pages/Login";
+import Profile from "components/pages/Profile";
+import Register from "components/pages/Register";
 import Theme from "components/pages/Theme";
 import Tracing from "components/pages/Tracing";
-import Login from "components/pages/Login";
 import { StoreProvider, ThemeProvider } from "context";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -16,8 +19,6 @@ import { QueryParamProvider } from "use-query-params";
 import App from "./App";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
-import Register from "components/pages/Register";
-import Profile from "components/pages/Profile";
 
 ReactDOM.render(
   <StoreProvider>
@@ -29,6 +30,7 @@ ReactDOM.render(
 
           <Switch>
             <Route path="/" exact component={App} />
+            <Route path="/explorer" exact component={Explorer} />
             <Route path="/tracing" exact component={Tracing} />
             <Route path="/clusters" exact component={Clusters} />
             <Route path="/theme" exact component={Theme} />
