@@ -126,9 +126,6 @@ const Tracing: React.FC = () => {
   useEffect(() => {
     setAdditional({ nodes: [], edges: [] });
     if (selected) setSelected(undefined);
-    if (network) {
-      // network.redraw();
-    }
   }, [depth]);
 
   const exploreTrace = (

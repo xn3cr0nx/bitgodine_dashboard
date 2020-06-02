@@ -1,7 +1,6 @@
 import cx from "classnames";
 import { bitcoin, go } from "constants/colors";
 import React, { useState, useContext, useMemo, SetStateAction } from "react";
-// import Graph from "react-graph-vis";
 import Graph from "react-vis-network-graph";
 import { Theme } from "context";
 import { Card } from "reactstrap";
