@@ -6,7 +6,7 @@ import Paginate from "components/Paginate";
 import SearchSection from "components/SearchSection";
 import Alert from "components/styled/Alert";
 import TraceCard from "components/TraceCard";
-import { danger, success, warning } from "constants/colors";
+import { danger, success, warning, go } from "constants/colors";
 import { endpoint } from "constants/config";
 import { Store, Theme } from "context";
 import { Next, Trace } from "context/store";
@@ -23,6 +23,16 @@ import {
   Spinner,
 } from "reactstrap";
 import { StringParam, useQueryParam } from "use-query-params";
+
+const nodeColors = {
+  exchange: "#3f51b5",
+  gambling: "#9c27b0",
+  mining: "#ffeb3b",
+  services: "#009688",
+  historical: "#607d8b",
+  unknown: go,
+  expandible: danger,
+};
 
 const fetchSearch = async (url: string): Promise<Response> => {
   return await fetch(url);
@@ -375,6 +385,22 @@ const Tracing: React.FC = () => {
                       </InputGroupButtonDropdown>
                     </InputGroup>
                   }
+                  legend={Object.keys(nodeColors).map(type => {
+                    return (
+                      <div key={type} className="flex flex-row align-items-center my-1">
+                        <div
+                          className="mr-2"
+                          style={{
+                            backgroundColor: (nodeColors as any)[type],
+                            borderRadius: "50px",
+                            width: "1.5rem",
+                            height: "1.5rem",
+                          }}
+                        />
+                        <p className="mb-0">{type}</p>
+                      </div>
+                    );
+                  })}
                 />
               ))}
               index={page}

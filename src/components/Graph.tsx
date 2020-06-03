@@ -121,11 +121,12 @@ export interface Props {
   style?: any;
   classes?: string;
   controls?: any;
+  legend?: any;
   options?: any;
   setNetwork?: React.Dispatch<SetStateAction<any>>;
 }
 
-const Network: React.FC<Props> = ({ title, graph, events, style, classes, controls, options, setNetwork }) => {
+const Network: React.FC<Props> = ({ title, graph, events, style, classes, controls, legend, options, setNetwork }) => {
   const { theme } = useContext(Theme);
   const [physics, setPhysics] = useState(true);
   const [hierarchy, setHierarchy] = useState(false);
@@ -199,9 +200,16 @@ const Network: React.FC<Props> = ({ title, graph, events, style, classes, contro
     </Card>
   );
 
+  const Legend = (
+    <Card className={cx("py-4 px-4 flex flex-column position-absolute right-5 mt-8 z-10 border", theme.bg)}>
+      {legend}
+    </Card>
+  );
+
   return (
     <div className={classes} style={style}>
       {Controls}
+      {legend && Legend}
       {title && <p className={cx("py-4 font-weight-bold text-center", theme.text)}>{title}</p>}
       <Graph
         graph={graph}
