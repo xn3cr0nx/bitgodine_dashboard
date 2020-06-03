@@ -30,7 +30,20 @@ const Navigation: React.FC<Props> = ({ list, itemsPerPage, index, setIndex, clas
             setIndex(0);
           }}>
           <i className="fa fa-angle-left" />
+          <i className="fa fa-angle-left" />
           <span className="sr-only">First</span>
+        </PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink
+          aria-label="Previous"
+          onClick={(e): void => {
+            e.preventDefault();
+            if (!index) return;
+            setIndex(index - 1);
+          }}>
+          <i className="fa fa-angle-left" />
+          <span className="sr-only">Previous</span>
         </PaginationLink>
       </PaginationItem>
       {Array.from(Array(Math.ceil(list.length / (itemsPerPage ?? pageLength))).keys()).map((n, i) => {
@@ -54,13 +67,25 @@ const Navigation: React.FC<Props> = ({ list, itemsPerPage, index, setIndex, clas
       })}
       <PaginationItem>
         <PaginationLink
+          aria-label="Next"
+          onClick={(e): void => {
+            e.preventDefault();
+            if (index === Math.ceil(list.length / (itemsPerPage ?? pageLength)) - 1) return;
+            setIndex(index + 1);
+          }}>
+          <i className="fa fa-angle-right" />
+          <span className="sr-only">Next</span>
+        </PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink
           aria-label="Last"
           onClick={(e): void => {
             e.preventDefault();
             if (index === Math.ceil(list.length / (itemsPerPage ?? pageLength)) - 1) return;
-            // setIndex(index + 1);
             setIndex(Math.ceil(list.length / (itemsPerPage ?? pageLength)) - 1);
           }}>
+          <i className="fa fa-angle-right" />
           <i className="fa fa-angle-right" />
           <span className="sr-only">Last</span>
         </PaginationLink>
