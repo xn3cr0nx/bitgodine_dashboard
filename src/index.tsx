@@ -18,6 +18,7 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { QueryParamProvider } from "use-query-params";
 import App from "./App";
 import "./index.css";
+import "assets/css/animations.css";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(

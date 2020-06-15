@@ -16,21 +16,25 @@ const PatternSection: React.FC<Props> = ({ height }) => {
   return (
     <section
       className="section section-lg section-shaped pb-0 pt-0 position-absolute t-0 w-100"
-      style={{ height: height ? height : width > laptop ? "60vh" : "80vh" }}>
+      style={{
+        height: height ? height : width > laptop ? "90vh" : "120vh",
+        transform: "skew(0, -6deg)",
+        marginTop: "-10rem",
+      }}>
       <div
         className={cx("shape shape-style-1 shape-primary")}
         style={{
           position: "unset",
           background: `linear-gradient(150deg, ${bitcoin} 20%, ${go}80 70%, ${background} 95%)`,
         }}>
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
+        <span className="bubble1" />
+        <span className="bubble2" />
+        <span className="bubble3" />
+        <span className="bubble4" />
+        <span className="bubble5" />
+        <span className="bubble6" />
+        <span className="bubble7" />
+        <span className="bubble8" />
       </div>
       <div className="separator separator-bottom separator-skew" style={{ bottom: "-1px" }}>
         <svg

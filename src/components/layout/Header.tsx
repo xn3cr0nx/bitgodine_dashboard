@@ -47,7 +47,7 @@ const Header: React.FC = () => {
     /*<header>*/
   }
   return (
-    <Navbar className={cx("w-100 navbar-horizontal navbar-dark", theme.bg, theme.text)} expand="lg" id="navbar">
+    <Navbar className={cx("z-100 w-100 navbar-horizontal navbar-dark", theme.bg, theme.text)} expand="lg" id="navbar">
       <Container>
         <NavbarBrand className="mr-lg-5" to="/" tag={Link}>
           <img alt="bitgodine" src={require("assets/img/brand/bitgodine_finder.png")} className="mr-2" />

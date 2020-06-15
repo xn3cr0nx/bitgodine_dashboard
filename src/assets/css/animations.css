@@ -1,0 +1,166 @@
+.bubble1 {
+  animation: fadeInDown ease 1s, hops1 linear 5s infinite;
+  animation-fill-mode: both;
+}
+
+.bubble2 {
+  animation: fadeInDown ease 1s, hops2 linear 5s infinite;
+  animation-fill-mode: both;
+}
+
+.bubble3 {
+  animation: fadeInDown ease 1s, hops3 linear 5s infinite;
+  animation-fill-mode: both;
+}
+
+.bubble4 {
+  animation: fadeInDown ease 1s, hops4 linear 5s infinite;
+  animation-fill-mode: both;
+}
+
+.bubble5 {
+  animation: fadeInDown ease 1s, hops5 linear 5s infinite;
+  animation-fill-mode: both;
+}
+
+.bubble6 {
+  animation: fadeInDown ease 1s, hops6 linear 5s infinite;
+  animation-fill-mode: both;
+}
+
+.bubble7 {
+  animation: fadeInDown ease 1s, hops7 linear 5s infinite;
+  animation-fill-mode: both;
+}
+
+.bubble8 {
+  animation: fadeInDown ease 1s, hops8 linear 5s infinite;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translate(0px, -25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0px, 0px);
+  }
+}
+
+@-moz-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -moz-transform: translate(0px, -25px);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: translate(0px, 0px);
+  }
+}
+
+@-webkit-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(0px, -25px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translate(0px, 0px);
+  }
+}
+
+@keyframes hops1 {
+  0%,
+  100% {
+    left: 1%;
+    bottom: 2%;
+  }
+  50% {
+    bottom: 1%;
+  }
+}
+
+@keyframes hops2 {
+  0%,
+  100% {
+    right: 33%;
+    top: 30%;
+  }
+  50% {
+    top: 31%;
+  }
+}
+
+@keyframes hops3 {
+  0%,
+  100% {
+  }
+  25% {
+    right: 6%;
+  }
+  50% {
+    top: 310px;
+  }
+}
+
+@keyframes hops4 {
+  0%,
+  100% {
+  }
+  25% {
+    right: 6.5%;
+  }
+  50% {
+    top: 340px;
+  }
+}
+
+@keyframes hops5 {
+  0%,
+  100% {
+  }
+  50% {
+    top: 37%;
+  }
+}
+
+@keyframes hops6 {
+  0%,
+  100% {
+    /* top: ; */
+  }
+  12% {
+    left: 10.5%;
+  }
+  25% {
+    left: 10%;
+  }
+  75% {
+    left: 10.5%;
+  }
+  50% {
+    top: 45%;
+    left: 10%;
+  }
+}
+
+@keyframes hops7 {
+  0%,
+  100% {
+    bottom: 1%;
+  }
+  50% {
+    bottom: 2%;
+  }
+}
+
+@keyframes hops8 {
+  0%,
+  100% {
+  }
+  50% {
+    bottom: 60px;
+  }
+}
