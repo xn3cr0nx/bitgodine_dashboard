@@ -61,12 +61,16 @@ export interface Next {
   vout: number;
   amount: number;
   weight?: number;
+  clusters: Cluster[];
 }
 
 export interface Cluster {
   address: string;
   cluster: number;
   nickname: string;
+  type: string;
+  message: string;
+  verified: boolean;
 }
 
 interface State {

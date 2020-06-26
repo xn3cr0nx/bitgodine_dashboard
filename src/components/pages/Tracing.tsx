@@ -9,7 +9,7 @@ import TraceCard from "components/TraceCard";
 import { danger, success, warning, go } from "constants/colors";
 import { endpoint } from "constants/config";
 import { Store, Theme } from "context";
-import { Next, Trace } from "context/store";
+import { Next, Trace, Cluster } from "context/store";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import useKeyPress from "hooks/useKeyPress";
 import { useMutation } from "react-query";
@@ -23,15 +23,17 @@ import {
   Spinner,
 } from "reactstrap";
 import { StringParam, useQueryParam } from "use-query-params";
+import { unique } from "libs/componentUtils";
 
 const nodeColors = {
   exchange: "#3f51b5",
   gambling: "#9c27b0",
   mining: "#ffeb3b",
   services: "#009688",
-  historical: "#607d8b",
+  historic: "#607d8b",
   unknown: go,
   expandible: danger,
+  checkbitcoinaddress: "#64ffda",
 };
 
 const fetchSearch = async (url: string): Promise<Response> => {
@@ -145,6 +147,7 @@ const Tracing: React.FC = () => {
     index: number,
     weight: number | undefined,
     currDepth: number,
+    clusters?: Cluster[],
   ): { nodes: Node[]; edges: Edge[] } => {
     const nodes: Node[] = [];
     const edges: Edge[] = [];
@@ -169,6 +172,18 @@ const Tracing: React.FC = () => {
       mass: 3,
     };
 
+    if (clusters && clusters.length) {
+      console.log("THE CLUSTERS", clusters);
+      const colors = clusters
+        .map(c => {
+          if (["submitted-links", "signed-messages", "bitcoin-otc-profiles"].includes(c.type))
+            return nodeColors.checkbitcoinaddress;
+          else return (nodeColors as any)[c.type];
+        })
+        .filter(unique);
+      node.color = colors[0];
+    }
+
     if (prev !== undefined) {
       const edge: Edge = {
         from: prev,
@@ -188,20 +203,21 @@ const Tracing: React.FC = () => {
           index + incr + 1,
           n.weight,
           currDepth + 1,
+          n.clusters,
         );
         if (recNodes.length && !recEdges.length) {
           node.color = danger;
         } else {
           // remove multiple equal branches merging paths together and deleting orphans branches
           recNodes.forEach(node => {
-            const filtered = recNodes.filter(n => node.label == n.label);
+            const filtered = recNodes.filter(n => node.label === n.label);
             if (filtered.length > 1) {
               filtered
                 .sort((a, b) => b.id - a.id)
                 .forEach((repeated, i) => {
                   if (i > 0) {
                     recEdges.filter((edge, j) => {
-                      if (edge.to == repeated.id) {
+                      if (edge.to === repeated.id) {
                         recEdges[j].to = filtered[0].id;
                       }
                     });
@@ -227,6 +243,7 @@ const Tracing: React.FC = () => {
     const graph: Graph = { nodes: [], edges: [] };
     if (state?.trace && state?.trace?.traces && state?.trace?.traces[page % limit]) {
       let trace: Trace = { txid: "", next: [] };
+      let key = "";
       for (const t of Object.keys(state.trace.traces[page % limit])) {
         let found = false;
         for (const c of Object.keys(state.trace.traces[page % limit])) {
@@ -236,10 +253,11 @@ const Tracing: React.FC = () => {
         }
         if (!found) {
           trace = state.trace.traces[page % limit][t];
+          key = t;
         }
       }
 
-      const { nodes, edges } = exploreTrace(trace, 0, undefined, 0, undefined, 1);
+      const { nodes, edges } = exploreTrace(trace, parseInt(key.split(":")[1]), undefined, 0, undefined, 1);
       graph.nodes.push(...nodes);
       graph.edges.push(...edges);
     }
@@ -351,7 +369,7 @@ const Tracing: React.FC = () => {
         ) : combinedGraph?.nodes?.length ?? false ? (
           <>
             <Paginate
-              classes="mt-9"
+              classes="header-margin"
               itemsPerPage={1}
               list={state.trace.occurences.map((txid: string, i: number) => (
                 <Network
@@ -373,7 +391,7 @@ const Tracing: React.FC = () => {
                           style={{ width: "3rem", borderRadius: 0 }}
                         />
                         <DropdownToggle split outline />
-                        <DropdownMenu className={cx(theme.bg, theme.text)}>
+                        <DropdownMenu className={cx(theme.bg, theme.text, "z-15")}>
                           <DropdownItem header>Depth</DropdownItem>
                           <DropdownItem divider />
                           {[10, 20, 50, 100, 200].map(d => (

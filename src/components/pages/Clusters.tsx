@@ -204,12 +204,12 @@ const Clusters: React.FC = () => {
               graph={cluster}
               events={events}
               setNetwork={setNetwork}
-              classes="mt-9"
+              classes="header-margin"
             />
             {hovered !== undefined ? (
-              <ClusterCard cluster={state?.cluster?.filter((c: any) => c.address == nodesMap[hovered])[0]} />
+              <ClusterCard cluster={state?.cluster?.filter((c: any) => c.address === nodesMap[hovered])[0]} />
             ) : selected !== undefined ? (
-              <ClusterCard cluster={state?.cluster?.filter((c: any) => c.address == nodesMap[selected])[0]} />
+              <ClusterCard cluster={state?.cluster?.filter((c: any) => c.address === nodesMap[selected])[0]} />
             ) : (
               false
             )}

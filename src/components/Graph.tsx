@@ -201,7 +201,7 @@ const Network: React.FC<Props> = ({ title, graph, events, style, classes, contro
   );
 
   const Legend = (
-    <Card className={cx("py-4 px-4 flex flex-column position-absolute right-5 mt-8 z-10 border", theme.bg)}>
+    <Card className={cx("py-4 px-4 flex flex-column position-absolute right-5 mt-8 z-5 border", theme.bg)}>
       {legend}
     </Card>
   );

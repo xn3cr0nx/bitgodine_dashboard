@@ -3,6 +3,7 @@ import { Theme } from "context";
 import { Trace } from "context/store";
 import React, { useContext, useMemo, useState } from "react";
 import { Card, CardBody, CardHeader } from "reactstrap";
+import { unique } from "libs/componentUtils";
 
 interface TraceCardProps {
   trace: Trace;
@@ -37,12 +38,14 @@ const TraceCard: React.FC<TraceCardProps> = ({ trace }) => {
   const markToHeuristics = (mask: string): string => {
     const list: string[] = [];
     for (let i = 0; i < mask.length; i++) {
-      if (mask.charAt(mask.length - 1 - i) == "1") {
+      if (mask.charAt(mask.length - 1 - i) === "1") {
         list.push((heuristics as any)[i]);
       }
     }
     return list.join(",");
   };
+
+  console.log("The trace", trace);
 
   if (!trace?.next) return null;
 
@@ -82,6 +85,19 @@ const TraceCard: React.FC<TraceCardProps> = ({ trace }) => {
                   <div className={styles.div}>
                     <p className={styles.label}>Analysis</p>
                     <p className={styles.detail}>{markToHeuristics(next.analysis)}</p>
+                  </div>
+                  <div className={styles.div}>
+                    <p className={styles.label}>Cluster Type</p>
+                    <p className={styles.detail}>
+                      {next.clusters
+                        .map(c => c.type)
+                        // .filter(unique)
+                        .join(",\n")}
+                    </p>
+                  </div>
+                  <div className={styles.div}>
+                    <p className={styles.label}>Clusters</p>
+                    <p className={styles.detail}>{next.clusters.map(c => c.message).join(";\n")}</p>
                   </div>
                 </CardBody>
               )}

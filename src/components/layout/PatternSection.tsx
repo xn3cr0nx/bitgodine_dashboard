@@ -18,7 +18,7 @@ const PatternSection: React.FC<Props> = ({ height }) => {
       className="section section-lg section-shaped pb-0 pt-0 position-absolute t-0 w-100"
       style={{
         height: height ? height : width > laptop ? "90vh" : "120vh",
-        transform: "skew(0, -6deg)",
+        transform: "skew(0, -4deg)",
         marginTop: "-10rem",
       }}>
       <div

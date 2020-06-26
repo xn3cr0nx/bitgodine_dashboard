@@ -92,7 +92,7 @@ code {
   top: 10rem;
   height: 2000px;
   background: #f4f5f7;
-  transform: skew(0, -6deg);
+  transform: skew(0, -4deg);
 }
 
 .navbar-nav .dropdown-menu:before {

@@ -126,6 +126,10 @@ export const alphabeticOrder = (a: any, b: any, name: any): number => {
 	return 0;
 };
 
+export const unique = (element: any, index: number, array: any[]): boolean => {
+	return element && array.indexOf(element) === index;
+};
+
 export const satToBtc = (value: number): number => {
 	return value * Math.pow(10, -8);
 };
