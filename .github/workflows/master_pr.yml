@@ -1,0 +1,57 @@
+name: PR build
+
+on:
+  pull_request:
+    branches: [master]
+    types: [closed]
+
+jobs:
+  deploy:
+    name: Build and push to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Docker login
+        run: "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker build
+        run: "docker build . -t $DOCKER_USERNAME/bitgodine_dashboard:latest"
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+      - name: Docker push tagged ref
+        run: "docker push $DOCKER_USERNAME/bitgodine_dashboard:latest"
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+  trigger:
+    name: Trigger devops
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Repository Production Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repository: xn3cr0nx/bitgodine_devops
+          event-type: trigger
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "repo": "${{ github.repository }}", "actor": "${{ github.actor }}", "branch": "production" }'
+
+  # notify:
+    # name: Slack Notification
+    # runs-on: ubuntu-latest
+    # needs: deploy
+    # if: failure()
+    # steps:
+      # - uses: rtCamp/action-slack-notify@v2.0.0
+        # env:
+          # SLACK_WEBHOOK: ${{ secrets.SLACK_URL }}
+          # SLACK_USERNAME: ${{ github.actor }}
+          # SLACK_ICON: https://avatars1.githubusercontent.com/u/55328880?s=200&v=4
+          # SLACK_COLOR: "#ff0000"
+          # SLACK_TITLE: "Failed deploy ${{ github.repository }} :crying_cat_face:"
+          # SLACK_MESSAGE: "*production*, version github.com/${{ github.repository }}/commit/${{ github.sha }}"
