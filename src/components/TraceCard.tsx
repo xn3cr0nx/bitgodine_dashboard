@@ -86,19 +86,25 @@ const TraceCard: React.FC<TraceCardProps> = ({ trace }) => {
                     <p className={styles.label}>Analysis</p>
                     <p className={styles.detail}>{markToHeuristics(next.analysis)}</p>
                   </div>
-                  <div className={styles.div}>
-                    <p className={styles.label}>Cluster Type</p>
-                    <p className={styles.detail}>
-                      {next.clusters
-                        .map(c => c.type)
-                        // .filter(unique)
-                        .join(",\n")}
-                    </p>
-                  </div>
-                  <div className={styles.div}>
-                    <p className={styles.label}>Clusters</p>
-                    <p className={styles.detail}>{next.clusters.map(c => c.message).join(";\n")}</p>
-                  </div>
+                  {next.clusters.length && next.clusters.length < 25 ? (
+                    <>
+                      <div className={styles.div}>
+                        <p className={styles.label}>Cluster Type</p>
+                        <p className={styles.detail}>
+                          {next.clusters
+                            .map(c => c.type)
+                            // .filter(unique)
+                            .join(",\n")}
+                        </p>
+                      </div>
+                      <div className={styles.div}>
+                        <p className={styles.label}>Clusters</p>
+                        <p className={styles.detail}>{next.clusters.map(c => c.message || c.nickname).join(",\n")}</p>
+                      </div>
+                    </>
+                  ) : (
+                    false
+                  )}
                 </CardBody>
               )}
             </Card>
